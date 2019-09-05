@@ -7,7 +7,6 @@ import ru.otus.spring01.dao.IPollingQuestion;
 import ru.otus.spring01.services.ConsolePolling;
 import ru.otus.spring01.services.IFileReader;
 
-import java.io.IOException;
 import java.util.function.Supplier;
 
 public class Main {
