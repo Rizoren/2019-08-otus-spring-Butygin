@@ -1,28 +1,27 @@
 package ru.otus.spring01.services;
 
-import ru.otus.spring01.dao.IPollingAnswer;
-import ru.otus.spring01.dao.IPollingQuestion;
-import ru.otus.spring01.dao.IPollingResult;
+import ru.otus.spring01.dao.PollingAnswer;
+import ru.otus.spring01.dao.PollingQuestion;
+import ru.otus.spring01.dao.PollingResultImpl;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class CSVReader implements IFileReader
+public class CSVReader implements QuestionnaireReader
 {
     private String filename = "";
-    private IPollingResult pollingResult;
+    private PollingResultImpl pollingResultImpl;
 
     public CSVReader() {}
 
-    public CSVReader(String filename, IPollingResult pollingResult)
+    public CSVReader(String filename, PollingResultImpl pollingResultImpl)
     {
         this.filename = filename;
-        this.pollingResult = pollingResult;
+        this.pollingResultImpl = pollingResultImpl;
     }
 
     public static String unQuote(String in)
@@ -70,18 +69,18 @@ public class CSVReader implements IFileReader
         }
     }
 
-    public void read(Supplier<IPollingQuestion> getQuestionBean, Supplier<IPollingAnswer> getAnswerBean)
+    public void read(Supplier<PollingQuestion> getQuestionBean, Supplier<PollingAnswer> getAnswerBean)
     {
         try {
             InputStream file = this.getClass().getResourceAsStream(filename);
             readFile(file, line -> {
                 String[] fields = split(line);
 
-                IPollingQuestion question = getQuestionBean.get();
+                PollingQuestion question = getQuestionBean.get();
                 question.setQuestion(fields[0]);
 
                 for (int i = 1; i < fields.length; i += 2) {
-                    IPollingAnswer answer = getAnswerBean.get();
+                    PollingAnswer answer = getAnswerBean.get();
                     answer.setAnswer(fields[i]);
 
                     if (i < fields.length) {
@@ -90,7 +89,7 @@ public class CSVReader implements IFileReader
                     question.addAnswer(answer);
                 }
 
-                pollingResult.addQuestion(question);
+                pollingResultImpl.addQuestion(question);
             });
         }
         catch (Exception e) {

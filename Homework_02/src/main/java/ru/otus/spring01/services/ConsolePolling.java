@@ -12,27 +12,27 @@ public class ConsolePolling
     private PrintStream out;
     private String firstName;
     private String surName;
-    private IPollingResult pollingResult;
+    private PollingResultImpl pollingResultImpl;
 
-    public ConsolePolling(IPollingResult pollingResult) {
+    public ConsolePolling(PollingResultImpl pollingResultImpl) {
         this.out = new PrintStream(System.out);
         this.scanner = new Scanner(System.in);
-        this.pollingResult = pollingResult;
+        this.pollingResultImpl = pollingResultImpl;
     }
 
     void showQuestion(String question) {
         out.println("Вопрос: " + question);
     }
 
-    void showAnswers(List<IPollingAnswer> answers) {
+    void showAnswers(List<PollingAnswer> answers) {
         int i = 1;
-        for (IPollingAnswer answer : answers) {
+        for (PollingAnswer answer : answers) {
             out.println(i + ": " + answer.getAnswer());
             i++;
         }
     }
 
-    int readAnswer(List<IPollingAnswer> answers) {
+    int readAnswer(List<PollingAnswer> answers) {
         out.print("Вариант ответа: ");
 
         try {
@@ -76,7 +76,7 @@ public class ConsolePolling
     {
         readPersonalInfo();
 
-        for (IPollingQuestion question : pollingResult) {
+        for (PollingQuestion question : pollingResultImpl) {
 
             out.println();
             int answerIndex = 0;
@@ -91,15 +91,15 @@ public class ConsolePolling
                 }
             } while (answerIndex < 0);
 
-            pollingResult.addScore(question.getAnswers().get(answerIndex - 1).getScore());
+            pollingResultImpl.addScore(question.getAnswers().get(answerIndex - 1).getScore());
         }
 
         out.println(NL + "Поздравляю, " + firstName + " " + surName);
-        out.println("Ваша отценка знаний: " + pollingResult.getScore());
+        out.println("Ваша отценка знаний: " + pollingResultImpl.getScore());
     }
 
     public int getScore()
     {
-        return pollingResult.getScore();
+        return pollingResultImpl.getScore();
     }
 }

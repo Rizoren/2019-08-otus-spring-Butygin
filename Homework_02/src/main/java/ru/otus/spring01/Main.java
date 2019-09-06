@@ -2,10 +2,10 @@ package ru.otus.spring01;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.otus.spring01.dao.IPollingAnswer;
-import ru.otus.spring01.dao.IPollingQuestion;
+import ru.otus.spring01.dao.PollingAnswer;
+import ru.otus.spring01.dao.PollingQuestion;
 import ru.otus.spring01.services.ConsolePolling;
-import ru.otus.spring01.services.IFileReader;
+import ru.otus.spring01.services.QuestionnaireReader;
 
 import java.util.function.Supplier;
 
@@ -15,9 +15,9 @@ public class Main {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
 
-        Supplier<IPollingAnswer> getAnswerBean = () -> context.getBean("answer", IPollingAnswer.class);
-        Supplier<IPollingQuestion> getQuestionBean = () -> context.getBean("question", IPollingQuestion.class);
-        IFileReader reader = context.getBean("reader", IFileReader.class);
+        Supplier<PollingAnswer> getAnswerBean = () -> context.getBean("answer", PollingAnswer.class);
+        Supplier<PollingQuestion> getQuestionBean = () -> context.getBean("question", PollingQuestion.class);
+        QuestionnaireReader reader = context.getBean("reader", QuestionnaireReader.class);
 
         try {
             reader.read(getQuestionBean, getAnswerBean);

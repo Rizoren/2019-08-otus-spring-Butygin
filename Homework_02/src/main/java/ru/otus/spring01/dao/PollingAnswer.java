@@ -1,6 +1,6 @@
 package ru.otus.spring01.dao;
 
-public class PollingAnswer implements IPollingAnswer
+public class PollingAnswer
 {
     private String answer;
     private int score;

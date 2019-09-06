@@ -3,11 +3,11 @@ package ru.otus.spring01.dao;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PollingQuestion implements IPollingQuestion
+public class PollingQuestion
 {
     private String question;
 
-    private List<IPollingAnswer> answers = new LinkedList<>();
+    private List<PollingAnswer> answers = new LinkedList<>();
 
     public String getQuestion()
     {
@@ -19,17 +19,17 @@ public class PollingQuestion implements IPollingQuestion
         this.question = question;
     }
 
-    public List<IPollingAnswer> getAnswers()
+    public List<PollingAnswer> getAnswers()
     {
         return answers;
     }
 
-    public void setAnswers(List<IPollingAnswer> answers)
+    public void setAnswers(List<PollingAnswer> answers)
     {
         this.answers = answers;
     }
 
-    public void addAnswer(IPollingAnswer answer)
+    public void addAnswer(PollingAnswer answer)
     {
         this.answers.add(answer);
     }

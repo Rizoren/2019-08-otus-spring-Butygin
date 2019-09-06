@@ -6,7 +6,7 @@
 
     <bean id="answer" class="ru.otus.spring01.dao.PollingAnswer" scope="prototype"/>
     <bean id="question" class="ru.otus.spring01.dao.PollingQuestion" scope="prototype"/>
-    <bean id="result" class="ru.otus.spring01.dao.PollingResult"/>
+    <bean id="result" class="ru.otus.spring01.dao.PollingResultImpl"/>
 
     <bean id="reader" class="ru.otus.spring01.services.CSVReader">
         <constructor-arg index="0" value="/anketa.csv"/>
