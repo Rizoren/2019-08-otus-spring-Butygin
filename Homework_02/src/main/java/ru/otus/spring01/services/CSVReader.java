@@ -41,7 +41,7 @@ public class CSVReader implements QuestionnaireReader
         int start = 0;
 
         for (int i = 0; i < s.length() - 1; i++) {
-            if (s.charAt(i) == ';' && notInsideComma) {
+            if (s.charAt(i) == ',' && notInsideComma) {
                 words.add(unQuote(s.substring(start, i)));
                 start = i + 1;
             }

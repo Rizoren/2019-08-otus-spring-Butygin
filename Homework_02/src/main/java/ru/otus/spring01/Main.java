@@ -1,7 +1,7 @@
 package ru.otus.spring01;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.otus.spring01.dao.PollingAnswer;
 import ru.otus.spring01.dao.PollingQuestion;
 import ru.otus.spring01.services.ConsolePolling;
@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args)  {
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         Supplier<PollingAnswer> getAnswerBean = () -> context.getBean("answer", PollingAnswer.class);
         Supplier<PollingQuestion> getQuestionBean = () -> context.getBean("question", PollingQuestion.class);

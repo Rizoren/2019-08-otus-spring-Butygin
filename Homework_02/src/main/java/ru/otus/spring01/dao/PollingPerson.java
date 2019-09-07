@@ -9,8 +9,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class PollingAnswer
-{
-    private String answer;
-    private int score;
+public class PollingPerson {
+    private String firstName;
+    private String surName;
+    private PollingResultImpl pollingResultImpl;
 }
