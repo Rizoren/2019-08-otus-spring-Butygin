@@ -2,6 +2,7 @@ package ru.otus.spring01;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.otus.spring01.config.AppConfig;
 import ru.otus.spring01.dao.PollingAnswer;
 import ru.otus.spring01.dao.PollingQuestion;
 import ru.otus.spring01.services.ConsolePolling;
@@ -11,7 +12,7 @@ import java.util.function.Supplier;
 
 public class Main {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws Exception  {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 

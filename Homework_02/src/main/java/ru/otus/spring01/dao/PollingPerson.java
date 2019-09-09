@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Setter
 @Getter
@@ -12,5 +13,7 @@ import lombok.ToString;
 public class PollingPerson {
     private String firstName;
     private String surName;
+    @Autowired
     private PollingResultImpl pollingResultImpl;
+
 }

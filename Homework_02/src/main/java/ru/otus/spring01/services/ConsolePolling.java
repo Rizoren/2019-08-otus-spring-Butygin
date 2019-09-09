@@ -1,42 +1,40 @@
 package ru.otus.spring01.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.otus.spring01.dao.*;
 
-import java.io.PrintStream;
 import java.util.*;
 
 public class ConsolePolling
 {
     private final static String NL = System.lineSeparator();
-    private Scanner scanner;
-    private PrintStream out;
-    private String firstName;
-    private String surName;
-    private PollingResultImpl pollingResultImpl;
-
-    public ConsolePolling(PollingResultImpl pollingResultImpl) {
-        this.out = new PrintStream(System.out);
-        this.scanner = new Scanner(System.in);
-        this.pollingResultImpl = pollingResultImpl;
-    }
+    @Autowired
+    private IOService ioService;
+    @Autowired
+    private PollingPerson person;
 
     void showQuestion(String question) {
-        out.println("Вопрос: " + question);
+        ioService.printMSln("pqa.question", new String[] {question} );
     }
 
-    void showAnswers(List<PollingAnswer> answers) {
+    void showAnswers(List<PollingAnswer> answers) throws Exception {
         int i = 1;
-        for (PollingAnswer answer : answers) {
-            out.println(i + ": " + answer.getAnswer());
-            i++;
+        if (answers.size() > 0 ) {
+            for (PollingAnswer answer : answers) {
+                ioService.println(i + ": " + answer.getAnswer());
+                i++;
+            }
+        }
+        else {
+            throw new Exception(ioService.getMS("pqa.errInvalidAnswer"));
         }
     }
 
     int readAnswer(List<PollingAnswer> answers) {
-        out.print("Вариант ответа: ");
-
+        //out.print("Вариант ответа: ");
+        ioService.printMS("pqa.answer");
         try {
-            String r = scanner.nextLine();
+            String r = ioService.getScanner().nextLine();
             int result = (r.replaceAll("\\D","").length() > 0 ? Integer.parseInt(r.replaceAll("\\D","")) : -1);
             if (result > answers.size() || result < 1) {
                 return -1;
@@ -53,32 +51,33 @@ public class ConsolePolling
     {
         switch (answerIndex) {
             case -1:
-                return "Данного варианта ответа не существует";
+                return "pqa.errAnswer";
             default:
-                return "Неизвестная ошибка";
+                return "pqa.errAnswerUnk";
         }
     }
 
     private void showErrorMessage(int answerIndex)
     {
-        out.println("Ошибка: " + getErrorMessage(answerIndex));
+        ioService.printMSln("pqa.err", new String[] {ioService.getMS(getErrorMessage(answerIndex))});
     }
 
     private void readPersonalInfo()
     {
-        out.print(NL + "Введите ваше имя: ");
-        firstName = scanner.nextLine();
-        out.print("Введите вашу фамилию: ");
-        surName = scanner.nextLine();
+        ioService.print(NL);
+        ioService.printMS("pqa.name");
+        person.setFirstName( ioService.getScanner().nextLine() );
+        ioService.printMS("pqa.family");
+        person.setSurName( ioService.getScanner().nextLine() );
     }
 
-    public void run()
+    public void run() throws Exception
     {
         readPersonalInfo();
 
-        for (PollingQuestion question : pollingResultImpl) {
+        for (PollingQuestion question : person.getPollingResultImpl()) {
 
-            out.println();
+            ioService.print(NL);
             int answerIndex = 0;
 
             do {
@@ -91,15 +90,15 @@ public class ConsolePolling
                 }
             } while (answerIndex < 0);
 
-            pollingResultImpl.addScore(question.getAnswers().get(answerIndex - 1).getScore());
+            person.getPollingResultImpl().addScore(question.getAnswers().get(answerIndex - 1).getScore());
         }
-
-        out.println(NL + "Поздравляю, " + firstName + " " + surName);
-        out.println("Ваша отценка знаний: " + pollingResultImpl.getScore());
+        ioService.print(NL);
+        ioService.printMSln("pqa.end", new String[] {person.getFirstName() + " " + person.getSurName()} );
+        ioService.printMSln("pqa.score", new String[] {String.valueOf(person.getPollingResultImpl().getScore())} );
     }
 
     public int getScore()
     {
-        return pollingResultImpl.getScore();
+        return person.getPollingResultImpl().getScore();
     }
 }
