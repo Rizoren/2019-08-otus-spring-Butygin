@@ -1,5 +1,7 @@
 package ru.otus.spring01.dao;
 
+import ru.otus.spring01.model.PollingQuestion;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;

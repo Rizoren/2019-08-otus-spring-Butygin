@@ -1,8 +1,7 @@
-package ru.otus.spring01.services;
+package ru.otus.spring01.dao;
 
-import ru.otus.spring01.dao.PollingAnswer;
-import ru.otus.spring01.dao.PollingQuestion;
-import ru.otus.spring01.dao.PollingResultImpl;
+import ru.otus.spring01.model.PollingAnswer;
+import ru.otus.spring01.model.PollingQuestion;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -11,14 +10,14 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class CSVReader implements QuestionnaireReader
+public class QuestionnaireReaderCSVImpl implements QuestionnaireReader
 {
     private String filename = "";
     private PollingResultImpl pollingResultImpl;
 
-    public CSVReader() {}
+    public QuestionnaireReaderCSVImpl() {}
 
-    public CSVReader(String filename, PollingResultImpl pollingResultImpl)
+    public QuestionnaireReaderCSVImpl(String filename, PollingResultImpl pollingResultImpl)
     {
         this.filename = filename;
         this.pollingResultImpl = pollingResultImpl;
@@ -69,18 +68,18 @@ public class CSVReader implements QuestionnaireReader
         }
     }
 
-    public void read(Supplier<PollingQuestion> getQuestionBean, Supplier<PollingAnswer> getAnswerBean)
+    public void read()
     {
         try {
             InputStream file = this.getClass().getResourceAsStream(filename);
             readFile(file, line -> {
                 String[] fields = split(line);
 
-                PollingQuestion question = getQuestionBean.get();
+                PollingQuestion question = new PollingQuestion();
                 question.setQuestion(fields[0]);
 
                 for (int i = 1; i < fields.length; i += 2) {
-                    PollingAnswer answer = getAnswerBean.get();
+                    PollingAnswer answer = new PollingAnswer();
                     answer.setAnswer(fields[i]);
 
                     if (i < fields.length) {

@@ -1,10 +1,10 @@
-package ru.otus.spring01.dao;
+package ru.otus.spring01.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
+import ru.otus.spring01.dao.PollingResultImpl;
 
 @Setter
 @Getter
@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PollingPerson {
     private String firstName;
     private String surName;
-    @Autowired
     private PollingResultImpl pollingResultImpl;
 
+    public PollingPerson(PollingResultImpl pollingResultImpl) {
+        this.pollingResultImpl = pollingResultImpl;
+    }
 }

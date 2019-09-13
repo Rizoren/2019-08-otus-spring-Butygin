@@ -1,17 +1,35 @@
 package ru.otus.spring01.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.otus.spring01.dao.*;
+import org.springframework.stereotype.Service;
+import ru.otus.spring01.dao.QuestionnaireReaderCSVImpl;
+import ru.otus.spring01.model.PollingAnswer;
+import ru.otus.spring01.model.PollingPerson;
+import ru.otus.spring01.model.PollingQuestion;
 
 import java.util.*;
 
+@Service
 public class ConsolePolling
 {
     private final static String NL = System.lineSeparator();
-    @Autowired
-    private IOService ioService;
-    @Autowired
+    private IOServiceImpl ioService;
     private PollingPerson person;
+    private QuestionnaireReaderCSVImpl reader;
+
+    public ConsolePolling (PollingPerson person, QuestionnaireReaderCSVImpl reader, IOServiceImpl ioService) {
+        this.person = person;
+        this.reader = reader;
+        this.ioService = ioService;
+    }
+
+    void read() {
+        try {
+            reader.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     void showQuestion(String question) {
         ioService.printMSln("pqa.question", new String[] {question} );
@@ -73,6 +91,7 @@ public class ConsolePolling
 
     public void run() throws Exception
     {
+        read();
         readPersonalInfo();
 
         for (PollingQuestion question : person.getPollingResultImpl()) {
@@ -94,7 +113,7 @@ public class ConsolePolling
         }
         ioService.print(NL);
         ioService.printMSln("pqa.end", new String[] {person.getFirstName() + " " + person.getSurName()} );
-        ioService.printMSln("pqa.score", new String[] {String.valueOf(person.getPollingResultImpl().getScore())} );
+        ioService.printMSln("pqa.score", new String[] {String.valueOf(this.getScore())} );
     }
 
     public int getScore()

@@ -3,10 +3,10 @@ package ru.otus.spring01;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.otus.spring01.config.AppConfig;
-import ru.otus.spring01.dao.PollingAnswer;
-import ru.otus.spring01.dao.PollingQuestion;
+import ru.otus.spring01.model.PollingAnswer;
+import ru.otus.spring01.model.PollingQuestion;
 import ru.otus.spring01.services.ConsolePolling;
-import ru.otus.spring01.services.QuestionnaireReader;
+import ru.otus.spring01.dao.QuestionnaireReader;
 
 import java.util.function.Supplier;
 
@@ -15,17 +15,6 @@ public class Main {
     public static void main(String[] args) throws Exception  {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        Supplier<PollingAnswer> getAnswerBean = () -> context.getBean("answer", PollingAnswer.class);
-        Supplier<PollingQuestion> getQuestionBean = () -> context.getBean("question", PollingQuestion.class);
-        QuestionnaireReader reader = context.getBean("reader", QuestionnaireReader.class);
-
-        try {
-            reader.read(getQuestionBean, getAnswerBean);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         ConsolePolling exam = context.getBean("exam", ConsolePolling.class);
         exam.run();
     }
