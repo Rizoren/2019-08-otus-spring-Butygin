@@ -23,6 +23,11 @@ public class IOServiceImpl implements IOService {
         this.scanner = new Scanner(System.in);
     }
 
+    @Override
+    public String readString() {
+        return this.scanner.nextLine();
+    }
+
     public void print (String str) { printStream.print(str); }
     public void println (String str) { printStream.println(str); }
 

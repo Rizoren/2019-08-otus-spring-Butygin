@@ -12,11 +12,11 @@ import java.util.*;
 public class ConsolePolling
 {
     private final static String NL = System.lineSeparator();
-    private IOServiceImpl ioService;
+    private IOService ioService;
     private PollingPerson person;
     private QuestionnaireReader reader;
 
-    public ConsolePolling (PollingPerson person, QuestionnaireReader reader, IOServiceImpl ioService) {
+    public ConsolePolling (PollingPerson person, QuestionnaireReader reader, IOService ioService) {
         this.person = person;
         this.reader = reader;
         this.ioService = ioService;
@@ -51,7 +51,7 @@ public class ConsolePolling
         //out.print("Вариант ответа: ");
         ioService.printMS("pqa.answer");
         try {
-            String r = ioService.getScanner().nextLine();
+            String r = /*ioService.getScanner().nextLine()*/ ioService.readString();
             int result = (r.replaceAll("\\D","").length() > 0 ? Integer.parseInt(r.replaceAll("\\D","")) : -1);
             if (result > answers.size() || result < 1) {
                 return -1;
@@ -83,9 +83,9 @@ public class ConsolePolling
     {
         ioService.print(NL);
         ioService.printMS("pqa.name");
-        person.setFirstName( ioService.getScanner().nextLine() );
+        person.setFirstName( /*ioService.getScanner().nextLine()*/ ioService.readString() );
         ioService.printMS("pqa.family");
-        person.setSurName( ioService.getScanner().nextLine() );
+        person.setSurName( /*ioService.getScanner().nextLine()*/ ioService.readString() );
     }
 
     public void run() throws Exception
