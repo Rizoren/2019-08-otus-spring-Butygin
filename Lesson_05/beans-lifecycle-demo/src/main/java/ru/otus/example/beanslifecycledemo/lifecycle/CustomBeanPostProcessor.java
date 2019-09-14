@@ -34,7 +34,6 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
         Field greetingField = aClass.getDeclaredField("greeting");
 
         greetingField.setAccessible(true);
-        greetingField.setAccessible(true);
         greetingField.set(bean, "Ай-да в гараж. Стихи читать!");
     }
 }

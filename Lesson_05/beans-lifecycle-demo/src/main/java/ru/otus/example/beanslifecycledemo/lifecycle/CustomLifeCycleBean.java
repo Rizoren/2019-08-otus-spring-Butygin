@@ -5,6 +5,9 @@ import org.springframework.beans.factory.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 public class CustomLifeCycleBean implements InitializingBean, DisposableBean, BeanNameAware, BeanFactoryAware, ApplicationContextAware {
 
     @Override
@@ -38,5 +41,15 @@ public class CustomLifeCycleBean implements InitializingBean, DisposableBean, Be
 
     public void customDestroyMethod() throws Exception {
         System.out.println("Шаг #10: CustomLifeCycleBean.customDestroyMethod\n");
+    }
+
+    @PostConstruct
+    public void postConstructMethod() throws Exception {
+        System.out.println("Шаг #5.5: CustomLifeCycleBean.postConstructMethod\n");
+    }
+
+    @PreDestroy
+    public void preDestroyMethod() throws Exception {
+        System.out.println("Шаг #8.5: CustomLifeCycleBean.preDestroyMethod\n");
     }
 }
