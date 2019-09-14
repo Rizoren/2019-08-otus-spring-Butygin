@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import ru.otus.spring01.dao.QuestionnaireReader;
 import ru.otus.spring01.model.PollingPerson;
 import ru.otus.spring01.dao.PollingResultImpl;
 import ru.otus.spring01.dao.QuestionnaireReaderCSVImpl;
@@ -22,9 +23,9 @@ public class AppConfig {
         return new IOServiceImpl(lang, bundle);
     }
     @Bean
-    public QuestionnaireReaderCSVImpl reader(@Value("${res.resPath}") String resPath, IOServiceImpl ioService, PollingResultImpl pollingResultImpl) {
+    public QuestionnaireReader readerCSV(@Value("${res.resPath}") String resPath, IOServiceImpl ioService, PollingResultImpl pollingResultImpl) {
         return new QuestionnaireReaderCSVImpl(resPath + "_" + ioService.getLocale().getLanguage() , pollingResultImpl);
     }
     @Bean
-    public ConsolePolling exam(PollingPerson person, QuestionnaireReaderCSVImpl reader, IOServiceImpl ioService) { return new ConsolePolling(person, reader, ioService); }
+    public ConsolePolling exam(PollingPerson person, QuestionnaireReader readerCSV, IOServiceImpl ioService) { return new ConsolePolling(person, readerCSV, ioService); }
 }

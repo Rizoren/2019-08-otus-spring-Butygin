@@ -1,8 +1,7 @@
 package ru.otus.spring01.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.spring01.dao.QuestionnaireReaderCSVImpl;
+import ru.otus.spring01.dao.QuestionnaireReader;
 import ru.otus.spring01.model.PollingAnswer;
 import ru.otus.spring01.model.PollingPerson;
 import ru.otus.spring01.model.PollingQuestion;
@@ -15,9 +14,9 @@ public class ConsolePolling
     private final static String NL = System.lineSeparator();
     private IOServiceImpl ioService;
     private PollingPerson person;
-    private QuestionnaireReaderCSVImpl reader;
+    private QuestionnaireReader reader;
 
-    public ConsolePolling (PollingPerson person, QuestionnaireReaderCSVImpl reader, IOServiceImpl ioService) {
+    public ConsolePolling (PollingPerson person, QuestionnaireReader reader, IOServiceImpl ioService) {
         this.person = person;
         this.reader = reader;
         this.ioService = ioService;
