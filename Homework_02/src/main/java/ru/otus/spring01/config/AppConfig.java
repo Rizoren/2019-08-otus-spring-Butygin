@@ -8,7 +8,7 @@ import ru.otus.spring01.dao.QuestionnaireReader;
 import ru.otus.spring01.model.PollingPerson;
 import ru.otus.spring01.dao.PollingResultImpl;
 import ru.otus.spring01.dao.QuestionnaireReaderCSVImpl;
-import ru.otus.spring01.services.ConsolePolling;
+import ru.otus.spring01.services.ConsolePollingImpl;
 import ru.otus.spring01.services.IOServiceImpl;
 
 @PropertySource("classpath:config.properties")
@@ -27,5 +27,5 @@ public class AppConfig {
         return new QuestionnaireReaderCSVImpl(resPath + "_" + ioService.getLocale().getLanguage() , pollingResultImpl);
     }
     @Bean
-    public ConsolePolling exam(PollingPerson person, QuestionnaireReader readerCSV, IOServiceImpl ioService) { return new ConsolePolling(person, readerCSV, ioService); }
+    public ConsolePollingImpl exam(PollingPerson person, QuestionnaireReader readerCSV, IOServiceImpl ioService) { return new ConsolePollingImpl(person, readerCSV, ioService); }
 }
