@@ -13,14 +13,14 @@ import java.util.function.Supplier;
 public class QuestionnaireReaderCSVImpl implements QuestionnaireReader
 {
     private String filename = "";
-    private PollingResultImpl pollingResultImpl;
+    private PollingResult pollingResult;
 
     public QuestionnaireReaderCSVImpl() {}
 
-    public QuestionnaireReaderCSVImpl(String filename, PollingResultImpl pollingResultImpl)
+    public QuestionnaireReaderCSVImpl(String filename, PollingResult pollingResult)
     {
         this.filename = filename;
-        this.pollingResultImpl = pollingResultImpl;
+        this.pollingResult = pollingResult;
     }
 
     public static String unQuote(String in)
@@ -88,7 +88,7 @@ public class QuestionnaireReaderCSVImpl implements QuestionnaireReader
                     question.addAnswer(answer);
                 }
 
-                pollingResultImpl.addQuestion(question);
+                pollingResult.addQuestion(question);
             });
         }
         catch (Exception e) {
