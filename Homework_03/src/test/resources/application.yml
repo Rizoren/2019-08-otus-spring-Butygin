@@ -1,0 +1,4 @@
+res:
+  resPath: /anketa.csv
+  defLang: ru
+  bundleBasePQA: pollingQA
