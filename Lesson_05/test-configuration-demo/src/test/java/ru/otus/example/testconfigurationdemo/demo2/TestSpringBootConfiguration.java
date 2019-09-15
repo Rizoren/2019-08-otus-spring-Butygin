@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import ru.otus.example.testconfigurationdemo.family.FamilyMember;
 import ru.otus.example.testconfigurationdemo.family.parents.Father;
 
-@ComponentScan({"ru.otus.example.testconfigurationdemo.family.parents",
-        "ru.otus.example.testconfigurationdemo.family.childrens"})
+@ComponentScan({"ru.otus.example.testconfigurationdemo.family.parents"/*,
+        "ru.otus.example.testconfigurationdemo.family.childrens"*/})
 @SpringBootConfiguration
 public class TestSpringBootConfiguration {
     @Bean
