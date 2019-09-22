@@ -1,11 +1,13 @@
 package ru.otus.springhomework04.dao;
 
+import org.springframework.stereotype.Service;
 import ru.otus.springhomework04.model.PollingQuestion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+@Service("result")
 public class PollingResultImpl implements PollingResult
 {
     private List<PollingQuestion> questions = new LinkedList<>();
@@ -46,6 +48,12 @@ public class PollingResultImpl implements PollingResult
 
     public int size() {
         return questions.size();
+    }
+
+    @Override
+    public void clear() {
+        questions.removeAll(questions);
+        activeQuestion = 0;
     }
 
     public Iterator<PollingQuestion> iterator()

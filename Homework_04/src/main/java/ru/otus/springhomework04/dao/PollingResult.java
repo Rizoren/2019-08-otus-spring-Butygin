@@ -14,5 +14,7 @@ public interface PollingResult extends Iterable<PollingQuestion>
 
     int size();
 
+    void clear();
+
     Iterator<PollingQuestion> iterator();
 }

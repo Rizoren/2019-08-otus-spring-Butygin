@@ -1,15 +1,12 @@
 package ru.otus.springhomework04.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.stereotype.Repository;
 import ru.otus.springhomework04.dao.PollingResult;
 
 @Setter
 @Getter
-@ToString
-@EqualsAndHashCode
+@Repository("person")
 public class PollingPerson {
     private String firstName;
     private String surName;

@@ -1,5 +1,8 @@
 package ru.otus.springhomework04.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.otus.springhomework04.AppProperties;
 import ru.otus.springhomework04.model.PollingAnswer;
 import ru.otus.springhomework04.model.PollingQuestion;
 
@@ -8,7 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.function.Consumer;
-
+@Service("reader")
 public class QuestionnaireReaderCSVImpl implements QuestionnaireReader
 {
     private String filename = "";
@@ -16,10 +19,16 @@ public class QuestionnaireReaderCSVImpl implements QuestionnaireReader
 
     public QuestionnaireReaderCSVImpl() {}
 
-    public QuestionnaireReaderCSVImpl(String filename, PollingResult pollingResult)
+    @Autowired
+    public QuestionnaireReaderCSVImpl(AppProperties appProperties, PollingResult pollingResult)
     {
-        this.filename = filename;
+        this.filename = appProperties.getResPath() + "_" + appProperties.getDefLang();
         this.pollingResult = pollingResult;
+    }
+
+    @Override
+    public void setFileName(String fileName) {
+        this.filename = fileName;
     }
 
     public static String unQuote(String in)
@@ -71,6 +80,9 @@ public class QuestionnaireReaderCSVImpl implements QuestionnaireReader
     {
         try {
             InputStream file = this.getClass().getResourceAsStream(filename);
+
+            if (pollingResult.size() > 0) { pollingResult.clear(); }
+
             readFile(file, line -> {
                 String[] fields = split(line);
 

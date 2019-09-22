@@ -1,24 +1,28 @@
 package ru.otus.springhomework04.services;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.stereotype.Service;
+import ru.otus.springhomework04.AppProperties;
 
 import java.io.PrintStream;
 import java.util.Locale;
 import java.util.Scanner;
 
 @Getter
+@Service("ioService")
 public class IOServiceImpl implements IOService {
     private ReloadableResourceBundleMessageSource messageSource;
     private Locale locale;
     private PrintStream printStream;
     private Scanner scanner;
 
-    public IOServiceImpl(String lang, String bundle) {
+    public IOServiceImpl(AppProperties appProperties) {
         this.messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename(bundle);
+        messageSource.setBasename(appProperties.getBundleBasePQA());
         messageSource.setDefaultEncoding("cp1251");
-        this.locale = new Locale(lang);
+        this.locale = new Locale(appProperties.getDefLang());
         this.printStream = System.out;
         this.scanner = new Scanner(System.in);
     }

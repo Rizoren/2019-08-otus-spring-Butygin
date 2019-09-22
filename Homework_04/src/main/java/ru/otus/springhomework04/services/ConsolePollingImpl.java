@@ -1,26 +1,33 @@
 package ru.otus.springhomework04.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.otus.springhomework04.AppProperties;
 import ru.otus.springhomework04.dao.QuestionnaireReader;
+import ru.otus.springhomework04.dao.QuestionnaireReaderCSVImpl;
 import ru.otus.springhomework04.model.PollingAnswer;
 import ru.otus.springhomework04.model.PollingPerson;
 import ru.otus.springhomework04.model.PollingQuestion;
 
 import java.util.*;
 
-@Service
+@Service("exam")
 public class ConsolePollingImpl implements ConsolePolling
 {
     private final static String NL = System.lineSeparator();
     private IOService ioService;
     private PollingPerson person;
     private QuestionnaireReader reader;
+    private AppProperties appProperties;
 
     public ConsolePollingImpl() {}
-    public ConsolePollingImpl(PollingPerson person, QuestionnaireReader reader, IOService ioService) {
+
+    @Autowired
+    public ConsolePollingImpl(PollingPerson person, QuestionnaireReader reader, IOService ioService, AppProperties appProperties) {
         this.person = person;
         this.reader = reader;
         this.ioService = ioService;
+        this.appProperties = appProperties;
     }
 
     void read() {
@@ -128,5 +135,10 @@ public class ConsolePollingImpl implements ConsolePolling
         ioService.printMSln("info.person", new String[] { person.getFirstName(),  person.getSurName() } );
         ioService.printMSln("pqa.score", new String[] { String.valueOf(this.getScore()) } );
         ioService.print(NL);
+    }
+
+    @Override
+    public void reloadReaderSrc() {
+        reader.setFileName(appProperties.getResPath()+"_"+appProperties.getDefLang());
     }
 }

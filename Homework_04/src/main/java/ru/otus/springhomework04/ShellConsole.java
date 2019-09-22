@@ -12,12 +12,14 @@ import ru.otus.springhomework04.services.IOService;
 public class ShellConsole {
     private ConsolePolling exam;
     private IOService ioService;
+    private AppProperties appProperties;
     private boolean examDone = false;
 
     @Autowired
-    public ShellConsole(IOService ioService, ConsolePolling exam) {
+    public ShellConsole(IOService ioService, ConsolePolling exam, AppProperties appProperties) {
         this.exam = exam;
         this.ioService = ioService;
+        this.appProperties = appProperties;
     }
 
     @ShellMethod(value = "Run console polling", key = {"run","start"})
@@ -35,6 +37,8 @@ public class ShellConsole {
     @ShellMethod(value = "Set lang [ en | ru ]", key = {"set-lang", "sl"})
     public void setLang(String lang) {
         ioService.setLang(lang);
+        appProperties.setDefLang(lang);
+        exam.reloadReaderSrc();
     }
 
     private Availability ifExamDone() {

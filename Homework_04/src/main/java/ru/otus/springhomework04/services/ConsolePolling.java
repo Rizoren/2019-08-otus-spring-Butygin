@@ -7,4 +7,6 @@ public interface ConsolePolling {
     int getScore();
 
     void PrintSummaryInfo();
+
+    void reloadReaderSrc();
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties("application")
+@ConfigurationProperties("res")
 public class AppProperties {
 
     private String resPath;
