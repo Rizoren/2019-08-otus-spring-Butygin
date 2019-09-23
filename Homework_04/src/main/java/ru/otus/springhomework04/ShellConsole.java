@@ -8,6 +8,9 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import ru.otus.springhomework04.services.ConsolePolling;
 import ru.otus.springhomework04.services.IOService;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 @ShellComponent
 public class ShellConsole {
     private ConsolePolling exam;
@@ -36,9 +39,14 @@ public class ShellConsole {
 
     @ShellMethod(value = "Set lang [ en | ru ]", key = {"set-lang", "sl"})
     public void setLang(String lang) {
-        ioService.setLang(lang);
-        appProperties.setDefLang(lang);
-        exam.reloadReaderSrc();
+
+        if(Arrays.stream(new String[] {"ru","en"}).anyMatch(s -> s.equals(lang))) {
+            ioService.setLang(lang);
+            appProperties.setDefLang(lang);
+            exam.reloadReaderSrc();
+        }
+        else ioService.printMSln("pqa.langNotFount", new String[] {lang} );
+
     }
 
     private Availability ifExamDone() {

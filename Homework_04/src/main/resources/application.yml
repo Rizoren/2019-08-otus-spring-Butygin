@@ -1,5 +1,9 @@
-spring.shell.interactive.enabled: true
 res:
   resPath: /anketa.csv
   defLang: ru
   bundleBasePQA: pollingQA
+spring:
+  shell.interactive.enabled: true
+  messages:
+    basename: pollingQA
+    encoding: cp1251
