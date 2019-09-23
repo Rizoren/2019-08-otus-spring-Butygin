@@ -9,7 +9,6 @@ import ru.otus.springhomework04.services.ConsolePolling;
 import ru.otus.springhomework04.services.IOService;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 @ShellComponent
 public class ShellConsole {
