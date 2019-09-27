@@ -1,0 +1,5 @@
+spring.shell.interactive.enabled: false
+res:
+  resPath: /anketa.csv
+  defLang: ru
+  bundleBasePQA: pollingQA
