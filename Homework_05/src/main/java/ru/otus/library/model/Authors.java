@@ -32,9 +32,9 @@ public class Authors {
     //Так не красиво делать, но нехочу пока выносить в отдельную функцию в сервис и т.д.
     public String toString() {
         return "ID: " + this.author_id + ", " +
-               "Ф.И.О: " + (this.author_name != null ? this.author_name : "") +
-                " " + (this.author_family != null ? this.author_family : "") +
-                " " + (this.author_patronymic != null ? this.author_patronymic : "");
+               "Ф.И.О: " + (this.author_family != null ? this.author_family : "") +
+                (this.author_name != null ? " " + this.author_name : "") +
+                (this.author_patronymic != null ? " " + this.author_patronymic : "");
     }
 
 }

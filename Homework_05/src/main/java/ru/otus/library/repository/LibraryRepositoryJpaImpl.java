@@ -16,11 +16,6 @@ public class LibraryRepositoryJpaImpl implements LibraryRepository {
     EntityManager em;
 
     @Override
-    public List<Books> findAllBooks() {
-        return em.createQuery("select b from Books b", Books.class).getResultList();
-    }
-
-    @Override
     public List<Authors> findAllAuthors() {
         return em.createQuery("select b from Authors b", Authors.class).getResultList();
     }
@@ -29,4 +24,22 @@ public class LibraryRepositoryJpaImpl implements LibraryRepository {
     public List<Genres> findAllGenres() {
         return em.createQuery("select b from Genres b", Genres.class).getResultList();
     }
+
+    @Override
+    public List<Books> findAllBooks() {
+        return em.createQuery("select b from Books b", Books.class).getResultList();
+    }
+
+    @Override
+    public List<Books> findAllByAuthorID(long id) {
+        return em.createQuery("select b from Books b inner join b.authors a where a.author_id = :id", Books.class)
+                .setParameter("id", id).getResultList();
+    }
+
+    @Override
+    public List<Books> findAllByGenreID(long id) {
+        return em.createQuery("select b from Books b inner join b.genres g where g.genre_id = :id", Books.class)
+                .setParameter("id", id).getResultList();
+    }
 }
+

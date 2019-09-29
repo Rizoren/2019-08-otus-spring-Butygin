@@ -5,9 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.otus.library.model.Authors;
 import ru.otus.library.model.Books;
 import ru.otus.library.model.Genres;
-import ru.otus.library.repository.AuthorsRepository;
-import ru.otus.library.repository.BooksRepository;
-import ru.otus.library.repository.GenresRepository;
 import ru.otus.library.repository.LibraryRepository;
 
 import java.util.List;
@@ -15,47 +12,43 @@ import java.util.List;
 @Service
 public class LibraryServiceImpl implements LibraryService {
 
-    private BooksRepository booksRepository;
-    private GenresRepository genresRepository;
-    private AuthorsRepository authorsRepository;
     private LibraryRepository libraryRepository;
+    private IOService ioService;
 
     @Autowired
-    public LibraryServiceImpl(BooksRepository booksRepository, GenresRepository genresRepository, AuthorsRepository authorsRepository, LibraryRepository libraryRepository) {
-        this.booksRepository = booksRepository;
-        this.genresRepository = genresRepository;
-        this.authorsRepository = authorsRepository;
+    public LibraryServiceImpl(LibraryRepository libraryRepository, IOService ioService) {
         this.libraryRepository = libraryRepository;
+        this.ioService = ioService;
     }
     @Override
     public void showInfo() {
-        System.out.println("В наличии книги, следующих авторов:");
+        ioService.println("В наличии книги, следующих авторов:");
         for (Authors a : libraryRepository.findAllAuthors()) {
-            System.out.println(a.toString());
+            ioService.println(a.toString());
         }
-        System.out.println("В наличии книги, следующих жанров:");
+        ioService.println("В наличии книги, следующих жанров:");
         for (Genres g : libraryRepository.findAllGenres()) {
-            System.out.println(g.toString());
+            ioService.println(g.toString());
         }
     }
     @Override
-    public void findAllBooksByGenre(long id) {
+    public void showAllBooksByGenreID(long id) {
 
-        List<Books> books = booksRepository.findAllByGenre(genresRepository.findById(id).get());
+        List<Books> books = libraryRepository.findAllByGenreID(id);
 
-        System.out.println("Книги по жанру:");
+        ioService.println("Книги по жанру:");
         for (Books bg : books) {
-            System.out.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
+            ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
         }
     }
     @Override
-    public void findAllBooksByAuthor(long id) {
+    public void showAllBooksByAuthorID(long id) {
 
-        List<Books> books = booksRepository.findAllByAuthor(authorsRepository.findById(id).get());
+        List<Books> books = libraryRepository.findAllByAuthorID(id);
 
-        System.out.println("Книги по автору:");
+        ioService.println("Книги по автору:");
         for (Books bg : books) {
-            System.out.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
+            ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
         }
     }
 }

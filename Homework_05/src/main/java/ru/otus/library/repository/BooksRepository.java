@@ -12,8 +12,6 @@ import java.util.Optional;
 public interface BooksRepository {
     Optional<Books> findById(long id);
     List<Books> findAll();
-    List<Books> findAllByAuthor(Authors author);
-    List<Books> findAllByGenre(Genres genres);
     Books save(Books books);
     void delete(Books books);
 }

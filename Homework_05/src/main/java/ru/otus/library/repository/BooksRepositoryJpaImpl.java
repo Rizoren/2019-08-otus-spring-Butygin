@@ -27,18 +27,6 @@ public class BooksRepositoryJpaImpl implements BooksRepository {
     }
 
     @Override
-    public List<Books> findAllByAuthor(Authors author) {
-        return em.createQuery("select b from Books b inner join b.authors author where author = :author", Books.class)
-                .setParameter("author", author).getResultList();
-    }
-
-    @Override
-    public List<Books> findAllByGenre(Genres genres) {
-        return em.createQuery("select b from Books b inner join b.genres gener where gener = :genres", Books.class)
-                .setParameter("genres", genres).getResultList();
-    }
-
-    @Override
     public Books save(Books books) {
         if (books.getBook_id() <= 0) {
             em.persist(books);

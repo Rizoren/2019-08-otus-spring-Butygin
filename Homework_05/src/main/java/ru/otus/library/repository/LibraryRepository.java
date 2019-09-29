@@ -7,7 +7,10 @@ import ru.otus.library.model.Genres;
 import java.util.List;
 
 public interface LibraryRepository {
-    List<Books> findAllBooks();
+
     List<Authors> findAllAuthors();
     List<Genres> findAllGenres();
+    List<Books> findAllBooks();
+    List<Books> findAllByAuthorID(long id);
+    List<Books> findAllByGenreID(long id);
 }
