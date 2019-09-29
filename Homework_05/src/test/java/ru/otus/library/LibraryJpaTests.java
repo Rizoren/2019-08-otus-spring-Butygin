@@ -8,8 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.library.model.*;
-import ru.otus.library.repository.*;
+import ru.otus.library.model.Authors;
+import ru.otus.library.model.Books;
+import ru.otus.library.model.Genres;
+import ru.otus.library.repository.AuthorsRepositoryJpaImpl;
+import ru.otus.library.repository.BooksRepositoryJpaImpl;
+import ru.otus.library.repository.GenresRepositoryJpaImpl;
+import ru.otus.library.repository.LibraryRepositoryJpaImpl;
+
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repositories of Library")
@@ -23,6 +31,7 @@ public class LibraryJpaTests {
     public static final int PREPARED_AMOUNT_AUTHORS = 3;
     public static final int PREPARED_AMOUNT_GENRES = 3;
     public static final int PREPARED_AMOUNT_BOOKS = 3;
+    public static final String TEST_STRING_DATA = "Test";
     @Autowired
     private TestEntityManager em;
     @Autowired
@@ -80,5 +89,35 @@ public class LibraryJpaTests {
     public void getBooksListLibraryRepositoryJpaTest () {
         val find = libraryRepositoryJpa.findAllBooks();
         assertThat(find).isNotNull().hasSize(PREPARED_AMOUNT_BOOKS);
+    }
+
+    @DisplayName("Library save-all-data-test")
+    @Test
+    public void saveAllDataAboutBook() {
+        val author = new Authors(0, TEST_STRING_DATA, TEST_STRING_DATA, TEST_STRING_DATA);
+        val genre = new Genres(0, TEST_STRING_DATA);
+        val authors = Collections.singletonList(author);
+        val genres = Collections.singletonList(genre);
+
+        val book = new Books(0, TEST_STRING_DATA, null, null, null, authors, genres);
+        booksRepositoryJpa.save(book);
+        assertThat(book.getBook_id()).isGreaterThan(0);
+
+        val actualBook = em.find(Books.class, book.getBook_id());
+        assertThat(actualBook).isNotNull().matches(s -> s.getBook_name().equals(TEST_STRING_DATA))
+                .matches(s -> s.getAuthors() != null && s.getAuthors().size() > 0 && s.getAuthors().get(0).getAuthor_family().equals(TEST_STRING_DATA))
+                .matches(s -> s.getGenres() != null && s.getGenres().size() > 0 && s.getGenres().get(0).getGenre_name().equals(TEST_STRING_DATA));
+    }
+
+    @DisplayName("Library delete-data-test")
+    @Test
+    public void deleteBookData() {
+
+        val find = booksRepositoryJpa.findById(FIRST_BOOK_ID);
+
+        booksRepositoryJpa.delete(find.get());
+
+        val expected = em.find(Books.class, FIRST_BOOK_ID);
+        assertThat(expected).isNull();
     }
 }
