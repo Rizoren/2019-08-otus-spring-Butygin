@@ -26,6 +26,7 @@ import static org.mockito.Mockito.verify;
 public class LibraryApplicationTests {
 
     public static final long ID_FOR_TEST = 1;
+    public static final String TEST_STRING_DATA = "Test";
     @Autowired
     private LibraryServiceImpl libraryService;
     @MockBean
@@ -96,5 +97,26 @@ public class LibraryApplicationTests {
         verify(ioService, times(1)).println("1: Руслан и Людмила");
         verify(ioService, times(1)).println("2: Демон");
 
+    }
+
+    @Test
+    @DisplayName("LibraryServiceImpl.showRandomBook")
+    void testShowRandomBook() {
+        List<Authors> authors = new ArrayList<>();
+        authors.add(new Authors(ID_FOR_TEST,TEST_STRING_DATA,TEST_STRING_DATA,TEST_STRING_DATA));
+        List<Genres> genres = new ArrayList<>();
+        genres.add(new Genres(ID_FOR_TEST,TEST_STRING_DATA));
+
+        Books books = new Books(ID_FOR_TEST, TEST_STRING_DATA, null,null,null,authors,genres);
+
+        given(libraryRepository.findRandomBook()).willReturn(books);
+
+        libraryService.showRandomBook();
+
+        verify(libraryRepository, times(1)).findRandomBook();
+        verify(ioService, times(1)).println("Случайная книга:");
+        verify(ioService, times(1)).println("ID: "+ID_FOR_TEST+", Название: \""+TEST_STRING_DATA+
+                "\"; Жанр(ы): "+TEST_STRING_DATA+"; Автор(ы): "+TEST_STRING_DATA+" "+TEST_STRING_DATA.substring(0,1)+
+                ". "+TEST_STRING_DATA.substring(0,1)+".");
     }
 }

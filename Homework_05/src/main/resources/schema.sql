@@ -60,10 +60,10 @@ create sequence authors_author_id_seq;
 */
 
 create or replace function random_between(low bigint, high bigint)
-returns bigint as
+returns bigint language plpgsql as
 '
 BEGIN
    RETURN floor(random()* (high-low + 1) + low);
 END;
 '
-language plpgsql;
+;

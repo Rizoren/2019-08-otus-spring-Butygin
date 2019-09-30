@@ -16,3 +16,4 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     initialization-mode: always
+    schema: classpath:schema_test.sql
