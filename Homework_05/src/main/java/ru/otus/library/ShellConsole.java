@@ -35,4 +35,8 @@ public class ShellConsole {
         libraryService.showRandomBook();
     }
 
+    @ShellMethod(value = "Insert author", key = {"ia","insert-author"})
+    public void insertAuthor() {
+        libraryService.insertAuthor();
+    }
 }

@@ -1,6 +1,7 @@
 package ru.otus.library.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.model.Authors;
 
 import javax.persistence.EntityManager;
@@ -25,6 +26,7 @@ public class AuthorsRepositoryJpaImpl implements AuthorsRepository {
     }
 
     @Override
+    @Transactional
     public Authors save(Authors authors) {
         if (authors.getAuthor_id() <= 0) {
             em.persist(authors);

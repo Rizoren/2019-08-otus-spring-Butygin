@@ -6,4 +6,5 @@ public interface LibraryService {
     void showAllBooksByGenreID(long id);
     void showAllBooksByAuthorID(long id);
     void showRandomBook();
+    void insertAuthor();
 }

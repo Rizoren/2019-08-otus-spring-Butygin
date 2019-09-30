@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.library.model.Authors;
 import ru.otus.library.model.Books;
 import ru.otus.library.model.Genres;
+import ru.otus.library.repository.AuthorsRepository;
 import ru.otus.library.repository.LibraryRepository;
 
 import java.util.List;
@@ -13,11 +14,13 @@ import java.util.List;
 public class LibraryServiceImpl implements LibraryService {
 
     private LibraryRepository libraryRepository;
+    private AuthorsRepository authorsRepository;
     private IOService ioService;
 
     @Autowired
-    public LibraryServiceImpl(LibraryRepository libraryRepository, IOService ioService) {
+    public LibraryServiceImpl(LibraryRepository libraryRepository, IOService ioService, AuthorsRepository authorsRepository) {
         this.libraryRepository = libraryRepository;
+        this.authorsRepository = authorsRepository;
         this.ioService = ioService;
     }
     @Override
@@ -77,5 +80,15 @@ public class LibraryServiceImpl implements LibraryService {
         }
 
         ioService.println(tmp);
+    }
+
+    @Override
+    public void insertAuthor() {
+        Authors author = new Authors();
+        ioService.println("Укажите Фамилию, Имя, Отчество автора (каждое поле в новой строке)");
+        author.setAuthor_family(ioService.readString());
+        author.setAuthor_name(ioService.readString());
+        author.setAuthor_patronymic(ioService.readString());
+        authorsRepository.save(author);
     }
 }
