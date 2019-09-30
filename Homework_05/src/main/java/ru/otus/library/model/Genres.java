@@ -21,7 +21,6 @@ public class Genres {
     @Column(name = "genre_name", nullable = false, unique = true)
     private String genre_name;
 
-    //Так не красиво делать, но нехочу пока выносить в отдельную функцию в сервис и т.д.
     public String toMyString() {
         return "ID: " + this.genre_id + ", " +
                "Наименование: " + (this.genre_name != null ? this.genre_name : "");

@@ -89,6 +89,7 @@ public class LibraryServiceImpl implements LibraryService {
         author.setAuthor_family(ioService.readString());
         author.setAuthor_name(ioService.readString());
         author.setAuthor_patronymic(ioService.readString());
-        authorsRepository.save(author);
+        author = authorsRepository.save(author);
+        ioService.println("Присвоен ID: " + author.getAuthor_id());
     }
 }

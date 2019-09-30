@@ -29,7 +29,6 @@ public class Authors {
     @Column(name = "author_patronymic", nullable = true, unique = false)
     private String author_patronymic;
 
-    //Так не красиво делать, но нехочу пока выносить в отдельную функцию в сервис и т.д.
     public String toMyString() {
         return "ID: " + this.author_id + ", " +
                "Ф.И.О: " + (this.author_family != null ? this.author_family : "") +
