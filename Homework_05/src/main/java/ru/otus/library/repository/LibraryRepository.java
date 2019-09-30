@@ -13,4 +13,5 @@ public interface LibraryRepository {
     List<Books> findAllBooks();
     List<Books> findAllByAuthorID(long id);
     List<Books> findAllByGenreID(long id);
+    Books findRandomBook();
 }

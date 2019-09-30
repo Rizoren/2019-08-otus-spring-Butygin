@@ -57,5 +57,3 @@ create sequence books_book_id_seq;
 create sequence genres_genre_id_seq;
 
 create sequence authors_author_id_seq;
-
-

@@ -29,4 +29,10 @@ public class ShellConsole {
     public void showAllBooksByAuthor(long author_id) {
         libraryService.showAllBooksByAuthorID(author_id);
     }
+
+    @ShellMethod(value = "Get random book", key = {"rb","random-book"})
+    public void showRandomBook() {
+        libraryService.showRandomBook();
+    }
+
 }

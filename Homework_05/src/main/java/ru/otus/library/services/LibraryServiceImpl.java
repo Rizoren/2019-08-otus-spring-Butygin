@@ -24,11 +24,11 @@ public class LibraryServiceImpl implements LibraryService {
     public void showInfo() {
         ioService.println("В наличии книги, следующих авторов:");
         for (Authors a : libraryRepository.findAllAuthors()) {
-            ioService.println(a.toString());
+            ioService.println(a.toMyString());
         }
         ioService.println("В наличии книги, следующих жанров:");
         for (Genres g : libraryRepository.findAllGenres()) {
-            ioService.println(g.toString());
+            ioService.println(g.toMyString());
         }
     }
     @Override
@@ -50,5 +50,32 @@ public class LibraryServiceImpl implements LibraryService {
         for (Books bg : books) {
             ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
         }
+    }
+    @Override
+    public void showRandomBook() {
+        String tmp = "";
+        Books books = libraryRepository.findRandomBook();
+
+        ioService.println("Случайная книга:");
+
+        tmp = "ID: " + books.getBook_id() + ", Название: \"" + books.getBook_name() + "\"";
+        if (books.getGenres().size() > 0) {
+            tmp = tmp + "; Жанр(ы): ";
+            for (Genres g : books.getGenres()) {
+                tmp = tmp + g.getGenre_name() + (books.getGenres().indexOf(g)+1 < books.getGenres().size() ? ", " : "");
+            }
+        }
+
+        if (books.getAuthors().size() > 0) {
+            tmp = tmp + "; Автор(ы): ";
+            for (Authors g : books.getAuthors()) {
+                tmp = tmp + g.getAuthor_family() +
+                        (g.getAuthor_name() != null ? " " + g.getAuthor_name().substring(0,1) + "." : "") +
+                        (g.getAuthor_patronymic() != null ? " " + g.getAuthor_patronymic().substring(0,1) + "." : "") +
+                        (books.getAuthors().indexOf(g)+1 < books.getAuthors().size() ? ", " : "");
+            }
+        }
+
+        ioService.println(tmp);
     }
 }

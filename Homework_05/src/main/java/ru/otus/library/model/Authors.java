@@ -30,7 +30,7 @@ public class Authors {
     private String author_patronymic;
 
     //Так не красиво делать, но нехочу пока выносить в отдельную функцию в сервис и т.д.
-    public String toString() {
+    public String toMyString() {
         return "ID: " + this.author_id + ", " +
                "Ф.И.О: " + (this.author_family != null ? this.author_family : "") +
                 (this.author_name != null ? " " + this.author_name : "") +
