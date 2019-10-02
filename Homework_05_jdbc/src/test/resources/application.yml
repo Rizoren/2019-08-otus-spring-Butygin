@@ -1,0 +1,19 @@
+spring:
+  shell.interactive.enabled: false
+
+  messages:
+    encoding: cp1251
+    basename: library
+
+  jpa:
+    database: h2
+    hibernate.ddl-auto: none
+
+    show-sql: false
+    properties.format_sql: true
+    properties.dialect: org.hibernate.dialect.H2Dialect
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    initialization-mode: always
+    schema: classpath:schema_test.sql
