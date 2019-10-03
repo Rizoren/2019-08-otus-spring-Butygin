@@ -30,11 +30,6 @@ public class ShellConsole {
         libraryService.showAllBooksByAuthorID(author_id);
     }
 
-    @ShellMethod(value = "Get random book", key = {"rb","random-book"})
-    public void showRandomBook() {
-        libraryService.showRandomBook();
-    }
-
     @ShellMethod(value = "Insert author", key = {"ia","insert-author"})
     public void insertAuthor() {
         libraryService.insertAuthor();
