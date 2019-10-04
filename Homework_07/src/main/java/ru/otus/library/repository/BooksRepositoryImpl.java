@@ -1,9 +1,7 @@
 package ru.otus.library.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.otus.library.model.Authors;
 import ru.otus.library.model.Books;
-import ru.otus.library.model.Genres;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,11 +19,9 @@ public class BooksRepositoryImpl implements BooksRepositoryCustom {
                         .getSingleResult().toString());
 
         Books books = em.createQuery("select b from Books b where b.book_id = :id", Books.class)
-                .setParameter("id", id).getSingleResult();
-        books.setAuthors(em.createQuery("select a from Books b inner join b.authors a where b.book_id = :id ", Authors.class)
-                .setParameter("id", books.getBook_id()).getResultList());
-        books.setGenres(em.createQuery("select g from Books b inner join b.genres g where b.book_id = :id ", Genres.class)
-                .setParameter("id", books.getBook_id()).getResultList());
+                .setParameter("id", id)
+                .getSingleResult();
+
         return books;
     }
 }

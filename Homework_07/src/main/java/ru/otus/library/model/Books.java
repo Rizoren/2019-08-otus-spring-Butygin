@@ -1,6 +1,10 @@
 package ru.otus.library.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,14 +38,16 @@ public class Books {
     @Column(name = "book_isbn", nullable = true, unique = false)
     private String book_isbn;
 
-    @ManyToMany(targetEntity = Authors.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(targetEntity = Authors.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "books_authors", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Authors> authors;
 
-    @ManyToMany(targetEntity = Genres.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(targetEntity = Genres.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "books_genres", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Genres> genres;
 
 }
