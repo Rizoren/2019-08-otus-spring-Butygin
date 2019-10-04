@@ -10,7 +10,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.library.model.Authors;
 import ru.otus.library.model.Books;
 import ru.otus.library.model.Genres;
-import ru.otus.library.repository.LibraryRepository;
+import ru.otus.library.repository.AuthorsRepository;
+import ru.otus.library.repository.BooksRepository;
+import ru.otus.library.repository.GenresRepository;
 import ru.otus.library.services.IOService;
 import ru.otus.library.services.LibraryServiceImpl;
 
@@ -32,7 +34,11 @@ public class LibraryApplicationTests {
     @MockBean
     private IOService ioService;
     @MockBean
-    private LibraryRepository libraryRepository;
+    private AuthorsRepository authorsRepository;
+    @MockBean
+    private GenresRepository genresRepository;
+    @MockBean
+    private BooksRepository booksRepository;
 
     @Test
     public void contextLoads() {
@@ -48,13 +54,13 @@ public class LibraryApplicationTests {
         authors.add(new Authors(2,"Второй","Второй","Второй"));
         genres.add(new Genres(1,"Первый"));
         genres.add(new Genres(2,"Второй"));
-        given(libraryRepository.findAllAuthors()).willReturn(authors);
-        given(libraryRepository.findAllGenres()).willReturn(genres);
+        given(authorsRepository.findAll()).willReturn(authors);
+        given(genresRepository.findAll()).willReturn(genres);
 
         libraryService.showInfo();
 
-        verify(libraryRepository, times(1)).findAllAuthors();
-        verify(libraryRepository, times(1)).findAllGenres();
+        verify(authorsRepository, times(1)).findAll();
+        verify(genresRepository, times(1)).findAll();
         verify(ioService, times(1)).println("В наличии книги, следующих авторов:");
         verify(ioService, times(1)).println("ID: 1, Ф.И.О: Первый Первый Первый");
         verify(ioService, times(1)).println("ID: 2, Ф.И.О: Второй Второй Второй");
@@ -70,11 +76,11 @@ public class LibraryApplicationTests {
         List<Books> books = new ArrayList<>();
         books.add(new Books(1,"Руслан и Людмила",null,null,null,null,null));
         books.add(new Books(2,"Демон",null,null,null,null,null));
-        given(libraryRepository.findAllByGenreID(ID_FOR_TEST)).willReturn(books);
+        given(booksRepository.findAllByGenres(null)).willReturn(books);
 
         libraryService.showAllBooksByGenreID(ID_FOR_TEST);
 
-        verify(libraryRepository, times(1)).findAllByGenreID(ID_FOR_TEST);
+        verify(booksRepository, times(1)).findAllByGenres(null);
         verify(ioService, times(1)).println("Книги по жанру:");
         verify(ioService, times(1)).println("1: Руслан и Людмила");
         verify(ioService, times(1)).println("2: Демон");
@@ -88,11 +94,11 @@ public class LibraryApplicationTests {
         List<Books> books = new ArrayList<>();
         books.add(new Books(1,"Руслан и Людмила",null,null,null,null,null));
         books.add(new Books(2,"Демон",null,null,null,null,null));
-        given(libraryRepository.findAllByAuthorID(ID_FOR_TEST)).willReturn(books);
+        given(booksRepository.findAllByAuthors(null)).willReturn(books);
 
         libraryService.showAllBooksByAuthorID(ID_FOR_TEST);
 
-        verify(libraryRepository, times(1)).findAllByAuthorID(ID_FOR_TEST);
+        verify(booksRepository, times(1)).findAllByAuthors(null);
         verify(ioService, times(1)).println("Книги по автору:");
         verify(ioService, times(1)).println("1: Руслан и Людмила");
         verify(ioService, times(1)).println("2: Демон");
@@ -109,11 +115,11 @@ public class LibraryApplicationTests {
 
         Books books = new Books(ID_FOR_TEST, TEST_STRING_DATA, null,null,null,authors,genres);
 
-        given(libraryRepository.findRandomBook()).willReturn(books);
+        given(booksRepository.findRandomBook()).willReturn(books);
 
         libraryService.showRandomBook();
 
-        verify(libraryRepository, times(1)).findRandomBook();
+        verify(booksRepository, times(1)).findRandomBook();
         verify(ioService, times(1)).println("Случайная книга:");
         verify(ioService, times(1)).println("ID: "+ID_FOR_TEST+", Название: \""+TEST_STRING_DATA+
                 "\"; Жанр(ы): "+TEST_STRING_DATA+"; Автор(ы): "+TEST_STRING_DATA+" "+TEST_STRING_DATA.substring(0,1)+

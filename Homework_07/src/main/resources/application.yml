@@ -21,3 +21,4 @@ spring:
     username: spring
     password: password
     initialization-mode: always
+

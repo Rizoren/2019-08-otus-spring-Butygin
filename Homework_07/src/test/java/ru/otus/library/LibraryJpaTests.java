@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repositories of Library")
 @DataJpaTest
-@Import({LibraryRepositoryJpaImpl.class})
+@Import({BooksRepositoryImpl.class})
 public class LibraryJpaTests {
 
     public static final long FIRST_AUTHOR_ID = 1;
@@ -37,8 +37,7 @@ public class LibraryJpaTests {
     private GenresRepository genresRepository;
     @Autowired
     private BooksRepository booksRepository;
-    @Autowired
-    private LibraryRepository libraryRepository;
+
 
     @DisplayName("Authors get-test")
     @Test
@@ -70,21 +69,21 @@ public class LibraryJpaTests {
     @DisplayName("Library get-all-authors-test")
     @Test
     public void getAuthorsListLibraryRepositoryJpaTest () {
-        val find = libraryRepository.findAllAuthors();
+        val find = authorsRepository.findAll();
         assertThat(find).isNotNull().hasSize(PREPARED_AMOUNT_AUTHORS);
     }
 
     @DisplayName("Library get-all-genres-test")
     @Test
     public void getGenresListLibraryRepositoryJpaTest () {
-        val find = libraryRepository.findAllGenres();
+        val find = genresRepository.findAll();
         assertThat(find).isNotNull().hasSize(PREPARED_AMOUNT_GENRES);
     }
 
     @DisplayName("Library get-all-books-test")
     @Test
     public void getBooksListLibraryRepositoryJpaTest () {
-        val find = libraryRepository.findAllBooks();
+        val find = booksRepository.findAll();
         assertThat(find).isNotNull().hasSize(PREPARED_AMOUNT_BOOKS);
     }
 

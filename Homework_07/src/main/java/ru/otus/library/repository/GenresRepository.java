@@ -6,10 +6,4 @@ import ru.otus.library.model.Genres;
 
 @Repository
 public interface GenresRepository extends JpaRepository<Genres, Long> {
-    /*
-    Optional<Genres> findById(long id);
-    List<Genres> findAll();
-    Genres save(Genres genres);
-    void delete(Genres genres);
-    */
 }

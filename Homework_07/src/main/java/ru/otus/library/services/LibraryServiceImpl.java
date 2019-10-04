@@ -6,39 +6,41 @@ import ru.otus.library.model.Authors;
 import ru.otus.library.model.Books;
 import ru.otus.library.model.Genres;
 import ru.otus.library.repository.AuthorsRepository;
-import ru.otus.library.repository.LibraryRepository;
+import ru.otus.library.repository.BooksRepository;
+import ru.otus.library.repository.GenresRepository;
 
 import java.util.List;
 
 @Service
 public class LibraryServiceImpl implements LibraryService {
 
-    private LibraryRepository libraryRepository;
     private AuthorsRepository authorsRepository;
+    private GenresRepository genresRepository;
+    private BooksRepository booksRepository;
     private IOService ioService;
 
     @Autowired
-    public LibraryServiceImpl(LibraryRepository libraryRepository, IOService ioService, AuthorsRepository authorsRepository) {
-        this.libraryRepository = libraryRepository;
+    public LibraryServiceImpl(IOService ioService, AuthorsRepository authorsRepository, GenresRepository genresRepository, BooksRepository booksRepository) {
+        this.genresRepository = genresRepository;
         this.authorsRepository = authorsRepository;
+        this.booksRepository = booksRepository;
         this.ioService = ioService;
     }
     @Override
     public void showInfo() {
         ioService.println("В наличии книги, следующих авторов:");
-        for (Authors a : libraryRepository.findAllAuthors()) {
+        for (Authors a : authorsRepository.findAll()) {
             ioService.println(a.toMyString());
         }
         ioService.println("В наличии книги, следующих жанров:");
-        for (Genres g : libraryRepository.findAllGenres()) {
+        for (Genres g : genresRepository.findAll()) {
             ioService.println(g.toMyString());
         }
     }
     @Override
     public void showAllBooksByGenreID(long id) {
 
-        List<Books> books = libraryRepository.findAllByGenreID(id);
-
+        List<Books> books = booksRepository.findAllByGenres(genresRepository.getOne(id));
         ioService.println("Книги по жанру:");
         for (Books bg : books) {
             ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
@@ -47,9 +49,8 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public void showAllBooksByAuthorID(long id) {
 
-        List<Books> books = libraryRepository.findAllByAuthorID(id);
-
-        ioService.println("Книги по автору:");
+        List<Books> books = booksRepository.findAllByAuthors(authorsRepository.getOne(id));
+                ioService.println("Книги по автору:");
         for (Books bg : books) {
             ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
         }
@@ -57,11 +58,12 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public void showRandomBook() {
         String tmp = "";
-        Books books = libraryRepository.findRandomBook();
+        Books books =  booksRepository.findRandomBook();//booksRepository.findById(Long.valueOf(1)).get();
 
         ioService.println("Случайная книга:");
 
         tmp = "ID: " + books.getBook_id() + ", Название: \"" + books.getBook_name() + "\"";
+
         if (books.getGenres().size() > 0) {
             tmp = tmp + "; Жанр(ы): ";
             for (Genres g : books.getGenres()) {
