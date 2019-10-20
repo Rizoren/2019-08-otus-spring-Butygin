@@ -37,8 +37,8 @@ public class PersonController {
     }
 
     @PostMapping("/edit")
-    public String savePage(@RequestBody Person person, @RequestParam("id") int id, Model model) {
-        repository.findById(id).get().setName(person.getName());
+    public String savePage(@RequestParam("id") int id, @RequestParam("name") String name, Model model) {
+        repository.findById(id).orElseThrow(NotFoundException::new).setName(name);
         List<Person> persons = repository.findAll();
         model.addAttribute("persons", persons);
         return "list";
