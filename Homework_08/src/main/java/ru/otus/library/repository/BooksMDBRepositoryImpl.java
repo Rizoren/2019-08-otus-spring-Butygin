@@ -1,34 +1,33 @@
 package ru.otus.library.repository;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.model.BooksMDB;
 import ru.otus.library.model.GenresMDB;
+import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @Repository
+@RequiredArgsConstructor
 public class BooksMDBRepositoryImpl implements BooksMDBRepositoryCustom {
-/*
-    @PersistenceContext
-    EntityManager em;
+
+    private final MongoTemplate mongoTemplate;
 
     @Override
-    public Books findRandomBook() {
-        long id = Long.valueOf(
-                em.createNativeQuery("select random_between(min(b2.book_id),max(b2.book_id)) from Books b2")
-                        .getSingleResult().toString());
+    public List<GenresMDB> findDistinctGenresMDB() {
+        Aggregation aggregation = newAggregation(
+                project().andInclude("genres")
+                , unwind("genres")
+                , group("genres.genre_name")
+                , project().andExclude("_id").and("_id").as("genre_name")
+                , sort(Sort.Direction.ASC,"genre_name")
+        );
 
-        Books books = em.createQuery("select b from Books b where b.book_id = :id", Books.class)
-                .setParameter("id", id)
-                .getSingleResult();
-
-        return books;
-    }
-*/
-    @Override
-    public GenresMDB findDistinctGenresMDB() {
-        return null;
+        return mongoTemplate.aggregate(aggregation, BooksMDB.class, GenresMDB.class).getMappedResults();
     }
 }
 

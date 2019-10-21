@@ -3,8 +3,7 @@ package ru.otus.library.services;
 public interface LibraryService {
 
     void showInfo();
-    void showAllBooksByGenreID(long id);
-    void showAllBooksByAuthorID(long id);
-    void showRandomBook();
+    void showAllBooksByGenre(String genre);
+    void showAllBooksByAuthorID(String id);
     void insertAuthor();
 }

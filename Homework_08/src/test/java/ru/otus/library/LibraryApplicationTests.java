@@ -1,5 +1,6 @@
 package ru.otus.library;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,17 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.otus.library.model.Authors;
-import ru.otus.library.model.Books;
-import ru.otus.library.model.Genres;
-import ru.otus.library.repository.AuthorsRepository;
-import ru.otus.library.repository.BooksRepository;
-import ru.otus.library.repository.GenresRepository;
+import ru.otus.library.model.AuthorsMDB;
+import ru.otus.library.model.BooksMDB;
+import ru.otus.library.model.GenresMDB;
+import ru.otus.library.repository.AuthorsMDBRepository;
+import ru.otus.library.repository.BooksMDBRepository;
 import ru.otus.library.services.IOService;
 import ru.otus.library.services.LibraryServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -33,12 +35,11 @@ public class LibraryApplicationTests {
     private LibraryServiceImpl libraryService;
     @MockBean
     private IOService ioService;
+
     @MockBean
-    private AuthorsRepository authorsRepository;
+    private AuthorsMDBRepository authorsMDBRepository;
     @MockBean
-    private GenresRepository genresRepository;
-    @MockBean
-    private BooksRepository booksRepository;
+    private BooksMDBRepository booksMDBRepository;
 
     @Test
     public void contextLoads() {
@@ -47,82 +48,74 @@ public class LibraryApplicationTests {
     @Test
     @DisplayName("LibraryServiceImpl.showInfo")
     void testShowInfo() {
-        List<Authors> authors = new ArrayList<>();
-        List<Genres> genres = new ArrayList<>();
+        List<AuthorsMDB> authors = new ArrayList<>();
+        List<BooksMDB> books = new ArrayList<>();
+        List<GenresMDB> genres = new ArrayList<>();
 
-        authors.add(new Authors(1,"Первый","Первый","Первый"));
-        authors.add(new Authors(2,"Второй","Второй","Второй"));
-        genres.add(new Genres(1,"Первый"));
-        genres.add(new Genres(2,"Второй"));
-        given(authorsRepository.findAll()).willReturn(authors);
-        given(genresRepository.findAll()).willReturn(genres);
+        authors.add(new AuthorsMDB(new ObjectId("5dadde8600086d41e4b79eaa"),TEST_STRING_DATA,TEST_STRING_DATA,TEST_STRING_DATA));
+        genres.add(new GenresMDB(TEST_STRING_DATA));
+        books.add(new BooksMDB(TEST_STRING_DATA,TEST_STRING_DATA,0,TEST_STRING_DATA, authors, genres));
+        given(authorsMDBRepository.findAll()).willReturn(authors);
+        given(booksMDBRepository.findDistinctGenresMDB()).willReturn(genres);
 
         libraryService.showInfo();
 
-        verify(authorsRepository, times(1)).findAll();
-        verify(genresRepository, times(1)).findAll();
+        verify(authorsMDBRepository, times(1)).findAll();
+        verify(booksMDBRepository, times(1)).findDistinctGenresMDB();
         verify(ioService, times(1)).println("В наличии книги, следующих авторов:");
-        verify(ioService, times(1)).println("ID: 1, Ф.И.О: Первый Первый Первый");
-        verify(ioService, times(1)).println("ID: 2, Ф.И.О: Второй Второй Второй");
+        verify(ioService, times(1)).println("ID: 5dadde8600086d41e4b79eaa, Ф.И.О: "+TEST_STRING_DATA+" "+TEST_STRING_DATA+" "+TEST_STRING_DATA);
         verify(ioService, times(1)).println("В наличии книги, следующих жанров:");
-        verify(ioService, times(1)).println("ID: 1, Наименование: Первый");
-        verify(ioService, times(1)).println("ID: 2, Наименование: Второй");
+        verify(ioService, times(1)).println(TEST_STRING_DATA);
     }
 
     @Test
-    @DisplayName("LibraryServiceImpl.showAllBooksByGenreID")
+    @DisplayName("LibraryServiceImpl.showAllBooksByGenre")
     void testShowAllBooksByGenreID() {
+        List<AuthorsMDB> authors = new ArrayList<>();
+        List<BooksMDB> books = new ArrayList<>();
+        GenresMDB genre = new GenresMDB(TEST_STRING_DATA);
 
-        List<Books> books = new ArrayList<>();
-        books.add(new Books(1,"Руслан и Людмила",null,null,null,null,null));
-        books.add(new Books(2,"Демон",null,null,null,null,null));
-        given(booksRepository.findAllByGenres(null)).willReturn(books);
+        authors.add(new AuthorsMDB(new ObjectId("5dadde8600086d41e4b79eaa"),TEST_STRING_DATA,TEST_STRING_DATA,TEST_STRING_DATA));
+        books.add(new BooksMDB(new ObjectId("5dadde8600086d41e4b79eab"),TEST_STRING_DATA,TEST_STRING_DATA,0,TEST_STRING_DATA, authors, Arrays.asList(genre)));
+        given(booksMDBRepository.findAllByGenresIsContaining(genre)).willReturn(books);
 
-        libraryService.showAllBooksByGenreID(ID_FOR_TEST);
+        libraryService.showAllBooksByGenre(TEST_STRING_DATA);
 
-        verify(booksRepository, times(1)).findAllByGenres(null);
+        verify(booksMDBRepository, times(1)).findAllByGenresIsContaining(genre);
         verify(ioService, times(1)).println("Книги по жанру:");
-        verify(ioService, times(1)).println("1: Руслан и Людмила");
-        verify(ioService, times(1)).println("2: Демон");
-
+        verify(ioService, times(1)).println("ID:\t\t\t5dadde8600086d41e4b79eab" +
+                "\nНазвание:\t" + TEST_STRING_DATA +
+                "\nОписание:\t" + TEST_STRING_DATA +
+                "\nISBN:\t\t" + TEST_STRING_DATA +
+                "\nЖанр(ы):\t" + "["+TEST_STRING_DATA+"]" +
+                "\nАвтор(ы):\t" + "[ID: 5dadde8600086d41e4b79eaa, Ф.И.О: "+TEST_STRING_DATA+" "+TEST_STRING_DATA+" "+TEST_STRING_DATA+"]");
+        verify(ioService, times(1)).println("------------------------------------------------------------");
     }
 
     @Test
     @DisplayName("LibraryServiceImpl.showAllBooksByAuthorID")
     void testShowAllBooksByAuthorID() {
+        List<BooksMDB> books = new ArrayList<>();
+        GenresMDB genre = new GenresMDB(TEST_STRING_DATA);
 
-        List<Books> books = new ArrayList<>();
-        books.add(new Books(1,"Руслан и Людмила",null,null,null,null,null));
-        books.add(new Books(2,"Демон",null,null,null,null,null));
-        given(booksRepository.findAllByAuthors(null)).willReturn(books);
+        AuthorsMDB author = new AuthorsMDB(new ObjectId("5dadde8600086d41e4b79eaa"),TEST_STRING_DATA,TEST_STRING_DATA,TEST_STRING_DATA);
+        Optional<AuthorsMDB> optionalAuthorsMDB = Optional.ofNullable(author);
 
-        libraryService.showAllBooksByAuthorID(ID_FOR_TEST);
+        books.add(new BooksMDB(new ObjectId("5dadde8600086d41e4b79eab"),TEST_STRING_DATA,TEST_STRING_DATA,0,TEST_STRING_DATA, Arrays.asList(author), Arrays.asList(genre)));
+        given(authorsMDBRepository.findById(new ObjectId("5dadde8600086d41e4b79eaa"))).willReturn(optionalAuthorsMDB);
+        given(booksMDBRepository.findAllByAuthorsIs(author)).willReturn(books);
 
-        verify(booksRepository, times(1)).findAllByAuthors(null);
-        verify(ioService, times(1)).println("Книги по автору:");
-        verify(ioService, times(1)).println("1: Руслан и Людмила");
-        verify(ioService, times(1)).println("2: Демон");
+        libraryService.showAllBooksByAuthorID("5dadde8600086d41e4b79eaa");
 
-    }
-
-    @Test
-    @DisplayName("LibraryServiceImpl.showRandomBook")
-    void testShowRandomBook() {
-        List<Authors> authors = new ArrayList<>();
-        authors.add(new Authors(ID_FOR_TEST,TEST_STRING_DATA,TEST_STRING_DATA,TEST_STRING_DATA));
-        List<Genres> genres = new ArrayList<>();
-        genres.add(new Genres(ID_FOR_TEST,TEST_STRING_DATA));
-
-        Books books = new Books(ID_FOR_TEST, TEST_STRING_DATA, null,null,null,authors,genres);
-
-        given(booksRepository.findRandomBook()).willReturn(books);
-
-        libraryService.showRandomBook();
-
-        verify(booksRepository, times(1)).findRandomBook();
-        verify(ioService, times(1)).println("Случайная книга:");
-        verify(ioService, times(1)).println("ID: "+ID_FOR_TEST+", Название: \""+TEST_STRING_DATA+
-                "\"; Жанр(ы): "+TEST_STRING_DATA+"; Автор(ы): "+TEST_STRING_DATA+" "+TEST_STRING_DATA.substring(0,1)+
-                ". "+TEST_STRING_DATA.substring(0,1)+".");
+        verify(booksMDBRepository, times(1)).findAllByAuthorsIs(author);
+        verify(ioService, times(1)).println("Книги " + TEST_STRING_DATA + " "
+                + TEST_STRING_DATA.substring(0,1) + "." + TEST_STRING_DATA.substring(0,1) + "." + ":");
+        verify(ioService, times(1)).println("ID:\t\t\t5dadde8600086d41e4b79eab" +
+                "\nНазвание:\t" + TEST_STRING_DATA +
+                "\nОписание:\t" + TEST_STRING_DATA +
+                "\nISBN:\t\t" + TEST_STRING_DATA +
+                "\nЖанр(ы):\t" + "["+TEST_STRING_DATA+"]" +
+                "\nАвтор(ы):\t" + "[ID: 5dadde8600086d41e4b79eaa, Ф.И.О: "+TEST_STRING_DATA+" "+TEST_STRING_DATA+" "+TEST_STRING_DATA+"]");
+        verify(ioService, times(1)).println("------------------------------------------------------------");
     }
 }

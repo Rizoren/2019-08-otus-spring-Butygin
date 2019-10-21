@@ -1,112 +1,57 @@
 package ru.otus.library.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import ru.otus.library.model.Authors;
-import ru.otus.library.model.Books;
-import ru.otus.library.model.BooksMDB;
-import ru.otus.library.model.Genres;
+import ru.otus.library.model.*;
 import ru.otus.library.repository.*;
 
-import java.util.List;
-
 @Service
+@AllArgsConstructor
 public class LibraryServiceImpl implements LibraryService {
 
-    final private AuthorsRepository authorsRepository;
-    final private GenresRepository genresRepository;
-    final private BooksRepository booksRepository;
     final private IOService ioService;
-
-    @Autowired
-    private AuthorsMDBRepository authorsMDBRepository;
-
+    final private AuthorsMDBRepository authorsMDBRepository;
     final private BooksMDBRepository booksMDBRepository;
 
-    public void test() {
-        authorsMDBRepository.findAll().forEach(authorsMDB -> ioService.println(authorsMDB.toString()));
-        booksMDBRepository.findAll().forEach(e -> {
-            ioService.println("-----------/");
-            ioService.println(e.toString());
-            ioService.println("-----------\\");
-        });
-    }
-
-    @Autowired
-    public LibraryServiceImpl(IOService ioService, AuthorsRepository authorsRepository, GenresRepository genresRepository, BooksRepository booksRepository,
-                              BooksMDBRepository booksMDBRepository) {
-        this.genresRepository = genresRepository;
-        this.authorsRepository = authorsRepository;
-        this.booksRepository = booksRepository;
-        this.ioService = ioService;
-        this.booksMDBRepository = booksMDBRepository;
-    }
     @Override
     public void showInfo() {
         ioService.println("В наличии книги, следующих авторов:");
-        for (Authors a : authorsRepository.findAll()) {
-            ioService.println(a.toMyString());
-        }
+        authorsMDBRepository.findAll().forEach(a -> ioService.println(a.toString()));
+
         ioService.println("В наличии книги, следующих жанров:");
-        for (Genres g : genresRepository.findAll()) {
-            ioService.println(g.toMyString());
-        }
+        booksMDBRepository.findDistinctGenresMDB().forEach(g -> ioService.println(g.toString()));
     }
-    @Override
-    public void showAllBooksByGenreID(long id) {
 
-        List<Books> books = booksRepository.findAllByGenres(genresRepository.getOne(id));
+    @Override
+    public void showAllBooksByGenre(String genre) {
         ioService.println("Книги по жанру:");
-        for (Books bg : books) {
-            ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
-        }
+        booksMDBRepository.findAllByGenresIsContaining(new GenresMDB(genre)).forEach(b -> {
+            ioService.println(b.toString());
+            ioService.println("------------------------------------------------------------");
+        });
     }
+
     @Override
-    public void showAllBooksByAuthorID(long id) {
-
-        List<Books> books = booksRepository.findAllByAuthors(authorsRepository.getOne(id));
-                ioService.println("Книги по автору:");
-        for (Books bg : books) {
-            ioService.println((books.indexOf(bg)+1) + ": " + bg.getBook_name());
-        }
-    }
-    @Override
-    public void showRandomBook() {
-        String tmp = "";
-        Books books =  booksRepository.findRandomBook();//booksRepository.findById(Long.valueOf(1)).get();
-
-        ioService.println("Случайная книга:");
-
-        tmp = "ID: " + books.getBook_id() + ", Название: \"" + books.getBook_name() + "\"";
-
-        if (books.getGenres().size() > 0) {
-            tmp = tmp + "; Жанр(ы): ";
-            for (Genres g : books.getGenres()) {
-                tmp = tmp + g.getGenre_name() + (books.getGenres().indexOf(g)+1 < books.getGenres().size() ? ", " : "");
-            }
-        }
-
-        if (books.getAuthors().size() > 0) {
-            tmp = tmp + "; Автор(ы): ";
-            for (Authors g : books.getAuthors()) {
-                tmp = tmp + g.getAuthor_family() +
-                        (g.getAuthor_name() != null ? " " + g.getAuthor_name().substring(0,1) + "." : "") +
-                        (g.getAuthor_patronymic() != null ? " " + g.getAuthor_patronymic().substring(0,1) + "." : "") +
-                        (books.getAuthors().indexOf(g)+1 < books.getAuthors().size() ? ", " : "");
-            }
-        }
-
-        ioService.println(tmp);
+    public void showAllBooksByAuthorID(String id) {
+        AuthorsMDB authorsMDB = authorsMDBRepository.findById(new ObjectId(id)).orElse(null);
+        ioService.println("Книги " + (authorsMDB.getFamily() != null ? authorsMDB.getFamily() + " " : "")
+                                   + (authorsMDB.getName() != null ? authorsMDB.getName().substring(0,1) + "." : "")
+                                   + (authorsMDB.getPatronymic() != null ? authorsMDB.getPatronymic().substring(0,1) + "." : "") + ":");
+        booksMDBRepository.findAllByAuthorsIs(authorsMDB).forEach(b -> {
+            ioService.println(b.toString());
+            ioService.println("------------------------------------------------------------");
+        });
     }
 
     @Override
     public void insertAuthor() {
-        Authors author = new Authors();
+        AuthorsMDB author = new AuthorsMDB();
         ioService.println("Укажите Фамилию, Имя, Отчество автора (каждое поле в новой строке)");
-        author.setAuthor_family(ioService.readString());
-        author.setAuthor_name(ioService.readString());
-        author.setAuthor_patronymic(ioService.readString());
-        author = authorsRepository.save(author);
-        ioService.println("Присвоен ID: " + author.getAuthor_id());
+        author.setFamily(ioService.readString());
+        author.setName(ioService.readString());
+        author.setPatronymic(ioService.readString());
+        author = authorsMDBRepository.save(author);
+        ioService.println("Присвоен ID: " + author.get_id().toString());
     }
 }

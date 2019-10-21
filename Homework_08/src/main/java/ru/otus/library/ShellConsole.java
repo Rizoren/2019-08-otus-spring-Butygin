@@ -15,29 +15,19 @@ public class ShellConsole {
         this.libraryService = libraryService;
     }
 
-    @ShellMethod(value = "test", key = {"t","test"})
-    public void test() {
-        libraryService.test();
-    }
-
     @ShellMethod(value = "Show info about Library", key = {"info","show-info"})
     public void showInfo() {
         libraryService.showInfo();
     }
 
-    @ShellMethod(value = "Get list of books by one genre id", key = {"bbg","books-by-genre"})
-    public void showAllBooksByGenre(long genre_id) {
-        libraryService.showAllBooksByGenreID(genre_id);
+    @ShellMethod(value = "Get list of books by one genre name", key = {"bbg","books-by-genre"})
+    public void showAllBooksByGenre(String genre) {
+        libraryService.showAllBooksByGenre(genre);
     }
 
     @ShellMethod(value = "Get list of books by one author id", key = {"bba","books-by-author"})
-    public void showAllBooksByAuthor(long author_id) {
+    public void showAllBooksByAuthor(String author_id) {
         libraryService.showAllBooksByAuthorID(author_id);
-    }
-
-    @ShellMethod(value = "Get random book", key = {"rb","random-book"})
-    public void showRandomBook() {
-        libraryService.showRandomBook();
     }
 
     @ShellMethod(value = "Insert author", key = {"ia","insert-author"})

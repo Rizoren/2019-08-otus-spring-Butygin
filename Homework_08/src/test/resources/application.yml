@@ -5,15 +5,14 @@ spring:
     encoding: cp1251
     basename: library
 
-  jpa:
-    database: h2
-    hibernate.ddl-auto: none
+  data:
+    mongodb:
+      port: 0
+      database: test
+      #uri: mongodb://localhost
+      #port: 27017
+      #database: springdb
 
-    show-sql: false
-    properties.format_sql: true
-    properties.dialect: org.hibernate.dialect.H2Dialect
-
-  datasource:
-    driver-class-name: org.h2.Driver
-    initialization-mode: always
-    schema: classpath:schema_test.sql
+logging:
+  level:
+    root: ERROR

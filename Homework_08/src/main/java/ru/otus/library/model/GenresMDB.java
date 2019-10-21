@@ -9,14 +9,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 //@Document("genres")
 public class GenresMDB {
 
     //@Id
     //private ObjectId _id;
 
-    @Basic
-    @Column(name = "genre_name", nullable = false, unique = true)
     private String genre_name;
 
     public String toString() {
