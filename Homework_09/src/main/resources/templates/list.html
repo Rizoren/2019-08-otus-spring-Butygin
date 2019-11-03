@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -28,40 +29,36 @@
 		</div>
 		<div class="myContent">
 			<ul style="list-style-type:none;">
-				<li><div class="myTaskEl"><div class="myTaskBody">				
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
+				<li th:each="task : ${tasks}">
+					<div class="myTaskEl"><div class="myTaskBody">
+						<a th:href="@{/edit(id=${task.taskId})}" href="edit.html"><span class="padding-el myTaskHeader" name="taskName" th:text="${task.taskName}">Your ToDo Task</span></a>
+						<span class="padding-el" style="display: inline-block" name="taskDescription" th:text="${task.taskDescription}">Description</span>
+				</div></div></li>
+				<li><div class="myTaskEl"><div class="myTaskBody">
 					<span class="padding-el myTaskHeader">Your ToDo Task 1</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 2</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 3</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 4</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 5</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 6</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 7</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 8</span>
 				</div></div></li>
 				<li><div class="myTaskEl"><div class="myTaskBody">
-					<input type="button" class="edit" value="Edit" onclick="window.location.href='edit'" />
 					<span class="padding-el myTaskHeader">Your ToDo Task 9</span>
 				</div></div></li>
 			</ul>

@@ -6,4 +6,5 @@ import ru.otus.todolist.model.Users;
 
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
+    Users findByUserName(String userName);
 }

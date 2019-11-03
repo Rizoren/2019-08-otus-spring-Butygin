@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.type.PostgresUUIDType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "tasks")
-public class Tasks {
+public class Tasks implements Serializable {
     @Id
     @Column(name = "task_id", nullable = false)
     private long taskId;
@@ -34,7 +35,8 @@ public class Tasks {
     @Column(name = "task_enddate", nullable = true)
     private Timestamp taskEnddate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_uuid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uuid", referencedColumnName = "user_uuid")
     private Users users;
+
 }
