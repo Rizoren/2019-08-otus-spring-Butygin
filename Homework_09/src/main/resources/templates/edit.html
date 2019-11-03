@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <title>ToDo List</title>
+        <!-- <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+        <link rel="stylesheet" href="../myCSS.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+
+        <header class="myHeader">
+            <h1 class="padding-el">Your ToDo List</h1>
+        </header>
+		<div class="myPanel">
+			<div style="padding: 30px 15px;">
+				<input type="submit" class="submit margin-el" style="width:100% !important;" value="Save" onclick="window.location.href='list'" />
+			</div>
+		</div>
+		<div class="myContent">
+			<form>
+				<span style="display: inline-block;">Task title: </span><input type="text" class="margin-el" style="display: block;" placeholder="username">
+				<span style="display: inline-block;">Task description: </span><textarea class="margin-el" style="display: block;" placeholder="username"></textarea>
+				<span style="display: inline-block;">Task date: </span><input type="datetime-local" class="margin-el" style="text-align: center; display: block;">
+				<span style="display: inline-block;">Task status: </span>
+				<div><input type="checkbox" class="margin-el" style="text-align: center; display: inline-block;"><span style="display: inline-block;"> -  Done.</span></div>
+			</form>
+		</div>
+    </body>
+</html>

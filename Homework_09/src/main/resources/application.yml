@@ -18,7 +18,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://127.0.0.1:5432/tododb
-    username: sysadmin
-    #username: spring
-    #password: password
-    #initialization-mode: always
+    #username: sysadmin
+    username: spring
+    password: password
+    initialization-mode: always
