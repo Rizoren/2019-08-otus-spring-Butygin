@@ -33,8 +33,9 @@ public class ToDoController {
 
     @GetMapping("/list")
     public String listPage(@RequestParam("userName") String userName, Model model) {
-        Users user = usersRepository.findByUserName(userName);
-        List<Tasks> tasks = tasksRepository.findAllByUsers(user);
+        Users user = usersRepository.findByUserName(userName).orElse(new Users(userName));
+        if (user.getUserId() == 0) user = usersRepository.save(user);
+        List<Tasks> tasks = user.getTasks();
         model.addAttribute("tasks", tasks);
         return "list";
     }
@@ -45,4 +46,10 @@ public class ToDoController {
         model.addAttribute("task", task);
         return "edit";
     }
+
+    @PostMapping("/edit")
+    public String editPageSave(Model model) {
+        return "list";
+    }
+
 }
