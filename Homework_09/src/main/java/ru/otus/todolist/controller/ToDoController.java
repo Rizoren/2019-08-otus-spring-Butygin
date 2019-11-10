@@ -1,12 +1,13 @@
 package ru.otus.todolist.controller;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import ru.otus.todolist.model.Tasks;
 import ru.otus.todolist.model.Users;
 import ru.otus.todolist.repository.TasksRepository;
@@ -31,24 +32,49 @@ public class ToDoController {
         return "login";
     }
 
-    @GetMapping("/list")
-    public String listPage(@RequestParam("userName") String userName, Model model) {
-        Users user = usersRepository.findByUserName(userName).orElse(new Users(userName));
-        if (user.getUserId() == 0) user = usersRepository.save(user);
+    @GetMapping("{id}/list")
+    public String getListPage(@PathVariable Long id, Model model) {
+        Users user = usersRepository.findById(id).get();
         List<Tasks> tasks = user.getTasks();
+        model.addAttribute("userId", id);
         model.addAttribute("tasks", tasks);
         return "list";
     }
 
-    @GetMapping("/edit")
-    public String editPage(@RequestParam("id") String id,Model model) {
-        Tasks task = tasksRepository.findById(Long.valueOf(id)).orElse(new Tasks());
+    @PostMapping("/list")
+    public RedirectView postListPage(@RequestParam("userName") String userName) {
+        Users user = usersRepository.findByUserName(userName).orElse(new Users(userName));
+        if (user.getUserId() == 0) {
+            user = usersRepository.saveAndFlush(user);
+        }
+        return new RedirectView(user.getUserId()+"/list");
+    }
+
+    @PostMapping("{id}/droplist")
+    public RedirectView dropListPage(@PathVariable Long id) {
+        Users user = usersRepository.findById(id).get();
+        usersRepository.delete(user);
+        return new RedirectView("/");
+    }
+
+    @GetMapping("{id}/newtask")
+    public String createPage(@PathVariable Long id, Model model) {
+        Tasks task = new Tasks();
+        model.addAttribute("userId", id);
         model.addAttribute("task", task);
         return "edit";
     }
 
-    @PostMapping("/edit")
-    public String editPageSave(Model model) {
+    @GetMapping("{id}/edit")
+    public String editPage(@PathVariable Long id, @RequestParam("task_id") String task_id, Model model) {
+        Tasks task = tasksRepository.findById(Long.valueOf(task_id)).orElse(new Tasks());
+        model.addAttribute("userId", id);
+        model.addAttribute("task", task);
+        return "edit";
+    }
+
+    @PostMapping("{id}/edit")
+    public String editPageSave(@PathVariable Long id, Model model) {
         return "list";
     }
 

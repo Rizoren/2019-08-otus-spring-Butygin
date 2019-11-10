@@ -35,8 +35,8 @@ public class Users implements Serializable {
     @Column(name = "user_password", length = 50)
     private String userPassword;
     @Basic
-    @Column(name = "user_uuid", unique = true, nullable = false)
-    private UUID userUuid = UUID.randomUUID();
+    @Column(insertable = false, /*updatable = false,*/ name = "user_uuid", unique = true, nullable = false)
+    private UUID userUuid;// = UUID.randomUUID();
     /* ToDo UUID db-generate
     Не смог заставить генерировать UUID самой базой
     При сохранении выполняется SQL:

@@ -23,17 +23,32 @@
             <h1 class="padding-el">Your ToDo List</h1>
         </header>
 		<div class="myPanel">
-			<div style="padding: 30px 15px;">
-				<input type="submit" class="submit margin-el" style="width:100% !important;" value="Save" onclick="window.location.href='list'" />
+			<form action="#" th:action="@{/}" method="post">
+				<div style="padding: 30px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Save" />
+				</div>
+			</form>
+			<div th:if="${task.taskId != 0}">
+				<form action="#" th:action="@{/}" method="post">
+					<div style="padding: 5px 15px;">
+						<input type="submit" class="submit margin-el" style="width:100% !important; color: salmon" value="Delete" />
+					</div>
+				</form>
 			</div>
+			<form action="#" th:action="@{list}" method="get">
+				<div style="padding: 5px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Back" />
+				</div>
+			</form>
 		</div>
 		<div class="myContent">
 			<form th:object="${task}">
-				<span style="display: inline-block;">Task title: </span><input type="text" class="margin-el" style="display: block;" placeholder="title" name="taskName" th:value="*{taskName}">
-				<span style="display: inline-block;">Task description: </span><textarea class="margin-el" style="display: block;" placeholder="description" name="taskDescription" th:value="*{taskDescription}"></textarea>
-				<span style="display: inline-block;">Task date: </span><input type="datetime-local" class="margin-el" style="text-align: center; display: block;" name="taskEnddate" th:value="*{taskEnddate}">
+				<span style="display: inline-block;">Task title: </span><input type="text" class="margin-el" style="display: block;" placeholder="title" name="taskName" th:field="*{taskName}">
+				<span style="display: inline-block;">Task description: </span><textarea class="margin-el" style="display: block;" placeholder="description" name="taskDescription" th:field="*{taskDescription}"></textarea>
+				<!--<span style="display: inline-block;">Task date: </span><input type="datetime-local" class="margin-el" style="text-align: center; display: block;" name="taskEnddate" th:field="*{taskEnddate}">-->
 				<span style="display: inline-block;">Task status: </span>
-				<div><input type="checkbox" class="margin-el" style="text-align: center; display: inline-block;" name="taskStatus" th:value="*{taskStatus}"><span style="display: inline-block;"> -  Done.</span></div>
+				<div><input type="checkbox" class="margin-el" style="text-align: center; display: inline-block;" name="taskStatus" th:checked="*{taskStatus} == 1 ? 'checked' : ''">
+					<label style="display: inline-block;"> -  Done.</label></div>
 			</form>
 		</div>
     </body>
