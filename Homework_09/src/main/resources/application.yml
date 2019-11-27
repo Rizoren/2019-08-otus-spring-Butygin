@@ -7,7 +7,6 @@ spring:
 
   jpa:
     database: postgresql
-    #database-platform: ru.otus.todolist.PostgresUuidDialect
 
     hibernate.ddl-auto: none
 

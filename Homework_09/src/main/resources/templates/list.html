@@ -42,7 +42,7 @@
 		<div class="myContent">
 			<ul style="list-style-type:none;">
 				<li th:each="task : ${tasks}">
-					<div class="myTaskEl"><div class="myTaskBody">
+					<div class="myTaskEl"><div class="myTaskBody" style="" th:style="${task.getTaskStatus()} == 1 ? 'background: #85C445' : ''">
 						<a th:href="@{edit(task_id=${task.taskId})}" href="edit.html"><span class="padding-el myTaskHeader" name="taskName" th:text="${task.taskName}">Your ToDo Task</span></a>
 						<span class="padding-el" style="display: inline-block" name="taskDescription" th:text="${task.taskDescription}">Description</span>
 				</div></div></li>

@@ -34,16 +34,6 @@ public class Users implements Serializable {
     @Basic
     @Column(name = "user_password", length = 50)
     private String userPassword;
-    @Basic
-    @Column(insertable = false, /*updatable = false,*/ name = "user_uuid", unique = true, nullable = false)
-    private UUID userUuid;// = UUID.randomUUID();
-    /* ToDo UUID db-generate
-    Не смог заставить генерировать UUID самой базой
-    При сохранении выполняется SQL:
-    org.postgresql.util.PSQLException: ОШИБКА: нулевое значение в столбце "user_uuid" нарушает ограничение NOT NULL
-    Подробности: Ошибочная строка содержит (3, Vasa, null, null)
-    последний null и есть "user_uuid"
-    */
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -53,4 +43,13 @@ public class Users implements Serializable {
         this.userName = userName;
     }
 
+    @Override
+    public String toString() {
+        return "Users{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", tasks=" + tasks.stream().toString() +
+                '}';
+    }
 }

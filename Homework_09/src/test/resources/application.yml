@@ -5,21 +5,24 @@ spring:
     encoding: cp1251
     basename: library
 
-  jpa:
-    database: postgresql
+#  datasource:
+#    url: jdbc:h2:mem:mydb
+#    driverClassName: org.h2.Driver
+#    username: sa
+#    password:
+#    schema: classpath:schema_test.sql
+#    initialization-mode: always
 
+  jpa:
+    database: h2
     hibernate.ddl-auto: none
 
     show-sql: false
     properties.format_sql: true
-    properties.hibernate.jdbc.lob.non_contextual_creation: true
-    properties.hibernate.temp.use_jdbc_metadata_defaults: false
-    properties.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+    properties.dialect: org.hibernate.dialect.H2Dialect
 
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/tododb
-    #username: sysadmin
-    username: spring
-    password: password
+    driver-class-name: org.h2.Driver
     initialization-mode: always
+    schema: classpath:schema_test.sql
+    data: classpath:data_test.sql

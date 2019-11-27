@@ -3,9 +3,12 @@ package ru.otus.todolist.controller;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.otus.todolist.model.Tasks;
@@ -13,6 +16,7 @@ import ru.otus.todolist.model.Users;
 import ru.otus.todolist.repository.TasksRepository;
 import ru.otus.todolist.repository.UsersRepository;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,8 +78,19 @@ public class ToDoController {
     }
 
     @PostMapping("{id}/edit")
-    public String editPageSave(@PathVariable Long id, Model model) {
-        return "list";
+    @Transactional
+    public RedirectView editPageSave(@PathVariable Long id, @Valid @ModelAttribute(name = "task") Tasks task, Model model) {
+        task.setUsers(usersRepository.findById(id).get());
+        task = tasksRepository.saveAndFlush(task);
+        model.addAttribute("task", task);
+        return new RedirectView("/{id}/list");
+    }
+
+    @PostMapping("{id}/droptask")
+    public RedirectView deletePageSave(@RequestParam("task_id") Long task_id) {
+        Tasks task = tasksRepository.findById(task_id).get();
+        tasksRepository.delete(task);
+        return new RedirectView("/{id}/list");
     }
 
 }
