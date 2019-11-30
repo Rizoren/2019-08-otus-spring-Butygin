@@ -50,7 +50,7 @@ class ToDolistApplicationTests {
                 .andReturn();
     }
 
-    @Test
+/*    @Test
     void shouldReturnEditPage() throws Exception {
         mockMvc.perform(get("/{id}/edit", USER_1).param("task_id", String.valueOf(TASK_1)))
                 .andDo(print())
@@ -58,5 +58,5 @@ class ToDolistApplicationTests {
                 .andExpect(view().name("edit"))
                 .andExpect(content().string(containsString(TASK_STR_1)))
                 .andReturn();
-    }
+    }*/
 }
