@@ -8,8 +8,13 @@ import ru.otus.spring.integration.domain.OrderItem;
 import java.util.Collection;
 
 // TODO: add messaging gateway annotation
+@MessagingGateway
 public interface Cafe {
 
     // TODO: add gateway annotation with required channels
-    Food process( OrderItem orderItem);
+    //@Gateway(requestChannel = "itemsChannel", replyChannel = "foodChannel")
+    //process( OrderItem orderItem );
+
+    @Gateway(requestChannel = "itemsChannel", replyChannel = "foodChannel")
+    Collection<Food> process( Collection<OrderItem> orderItems );
 }
