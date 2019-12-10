@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <title>ToDo List</title>
+        <!-- <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+		<link rel="stylesheet" href="../myCSS.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+
+        <header class="myHeader">
+            <h1 class="padding-el">Your ToDo List</h1>
+        </header>
+		<div class="myPanel">
+			<form action="#" th:action="@{newtask}" method="get">
+				<div style="padding: 30px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Add task" />
+				</div>
+			</form>
+			<form action="#" th:action="@{droplist}" method="post">
+				<div style="padding: 5px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important; color: salmon;" value="Delete List" />
+				</div>
+			</form>
+			<form action="/" method="get">
+				<div style="padding: 5px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Exit" />
+				</div>
+			</form>
+		</div>
+		<div class="myContent">
+			<ul style="list-style-type:none;">
+				<li th:each="task : ${tasks}">
+					<div class="myTaskEl"><div class="myTaskBody" style="" th:style="${task.getTaskStatus()} == 1 ? 'background: #85C445' : ''">
+						<a th:href="@{edit(task_id=${task.taskId})}" href="edit.html"><span class="padding-el myTaskHeader" name="taskName" th:text="${task.taskName}">Your ToDo Task</span></a>
+						<span class="padding-el" style="display: inline-block" name="taskDescription" th:text="${task.taskDescription}">Description</span>
+				</div></div></li>
+			</ul>
+		</div>
+<!--		<script>
+            $(function () {
+                /*window.location.href*/
+                $.getJSON('/api/tasklist?id=1', function (tasks) {
+                    console.debug(tasks);
+                    tasks.forEach(function (task) {
+                        $('ul').append(`
+						<li><div class="myTaskEl"><div class="myTaskBody" style="" th:style="${task.getTaskStatus()} == 1 ? 'background: #85C445' : ''">
+								<a th:href="@{edit(task_id=${task.taskId})}" href="edit.html"><span class="padding-el myTaskHeader" name="taskName" th:text="${task.taskName}">Your ToDo Task</span></a>
+								<span class="padding-el" style="display: inline-block" name="taskDescription" th:text="${task.taskDescription}">Description</span>
+						</div></div></li>
+						`)
+                    });
+                });
+            });
+		</script>-->
+    </body>
+</html>

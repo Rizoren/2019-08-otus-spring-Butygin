@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <title>ToDo List</title>
+        <!-- <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+        <link rel="stylesheet" href="../myCSS.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+
+        <header class="myHeader">
+            <h1 class="padding-el">Your ToDo List</h1>
+        </header>
+		<div class="myPanel">
+			<div th:if="${task.taskId != 0}">
+				<form action="#" th:action="@{droptask(task_id=${task.taskId})}" method="post">
+					<div style="padding: 30px 15px;">
+                        <input type="hidden" name="task_id" th:value="${task.taskId}">
+						<input type="submit" class="submit margin-el" style="width:100% !important; color: salmon" value="Delete" />
+					</div>
+				</form>
+			</div>
+			<form action="#" th:action="@{list}" method="get">
+				<div style="padding: 5px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Back" />
+				</div>
+			</form>
+		</div>
+		<div class="myContent">
+			<form th:object="${task}" action="#" th:action="@{edit(task_id=${task.taskId})}" method="post">
+				<input type="hidden" name="taskId" th:value="*{taskId}">
+				<span style="display: inline-block;">Task title: </span><input type="text" class="margin-el" style="display: block;" placeholder="title" name="taskName" th:field="*{taskName}">
+				<span style="display: inline-block;">Task description: </span><textarea class="margin-el" style="display: block;" placeholder="description" name="taskDescription" th:field="*{taskDescription}"></textarea>
+				<!--<span style="display: inline-block;">Task date: </span><input type="datetime-local" class="margin-el" style="text-align: center; display: block;" name="taskEnddate" th:field="*{taskEnddate}">-->
+				<span style="display: inline-block;">Task status: </span>
+				<select name="taskStatus" th:field="*{taskStatus}">
+					<option value ="0" th:selected="*{taskStatus==0}">In progress</option>
+					<option value ="1" th:selected="*{taskStatus==1}">Done</option>
+				</select>
+				<div style="padding: 30px 15px;">
+					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Save" />
+				</div>
+			</form>
+		</div>
+    </body>
+</html>
