@@ -1,11 +1,9 @@
 package ru.otus.todolist.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.todolist.model.Tasks;
-import ru.otus.todolist.model.Users;
 import ru.otus.todolist.repository.TasksRepository;
 import ru.otus.todolist.repository.UsersRepository;
 

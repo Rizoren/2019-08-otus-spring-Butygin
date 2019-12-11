@@ -34,11 +34,7 @@ public class Users implements Serializable {
     @Basic
     @Column(name = "user_password", length = 50)
     private String userPassword;
-/*
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Fetch(value = FetchMode.JOIN)
-    private List<Tasks> tasks = new ArrayList<>();
-*/
+
     public Users(String userName) {
         this.userName = userName;
     }

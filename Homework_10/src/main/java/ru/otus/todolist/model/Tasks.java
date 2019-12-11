@@ -35,8 +35,6 @@ public class Tasks implements Serializable {
     @Column(name = "task_enddate", nullable = true)
     private Timestamp taskEnddate;
 
-    //TODO: I have problem... Recursive getting data
-    //When I get Task-list, also get User and get task list in user...
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private Users users;
