@@ -36,12 +36,8 @@ public class ToDoController {
         return "login";
     }
 
-    @GetMapping("{id}/list")
-    public String getListPage(@PathVariable Long id, Model model) {
-        Users user = usersRepository.findById(id).get();
-        List<Tasks> tasks = user.getTasks();
-        model.addAttribute("userId", id);
-        model.addAttribute("tasks", tasks);
+    @GetMapping("/list")
+    public String getListPage(@RequestParam("id") Long id) {
         return "list";
     }
 
@@ -51,46 +47,46 @@ public class ToDoController {
         if (user.getUserId() == 0) {
             user = usersRepository.saveAndFlush(user);
         }
-        return new RedirectView(user.getUserId()+"/list");
+        return new RedirectView("/list?id="+user.getUserId());
     }
 
-    @PostMapping("{id}/droplist")
-    public RedirectView dropListPage(@PathVariable Long id) {
+    @PostMapping("/droplist")
+    public RedirectView dropListPage(@RequestParam("id") Long id) {
         Users user = usersRepository.findById(id).get();
         usersRepository.delete(user);
         return new RedirectView("/");
     }
 
-    @GetMapping("{id}/newtask")
-    public String createPage(@PathVariable Long id, Model model) {
-        Tasks task = new Tasks();
-        model.addAttribute("userId", id);
-        model.addAttribute("task", task);
+    @GetMapping("/newtask")
+    public String createPage(@RequestParam("id") Long id, Model model) {
+//        Tasks task = new Tasks();
+//        model.addAttribute("userId", id);
+//        model.addAttribute("task", task);
         return "edit";
     }
 
-    @GetMapping("{id}/edit")
-    public String editPage(@PathVariable Long id, @RequestParam("task_id") String task_id, Model model) {
+    @GetMapping("/edit")
+    public String editPage(@RequestParam("id") Long id, @RequestParam("task_id") String task_id, Model model) {
         Tasks task = tasksRepository.findById(Long.valueOf(task_id)).orElse(new Tasks());
         model.addAttribute("userId", id);
         model.addAttribute("task", task);
         return "edit";
     }
 
-    @PostMapping("{id}/edit")
+    @PostMapping("/edit")
     @Transactional
-    public RedirectView editPageSave(@PathVariable Long id, @Valid @ModelAttribute(name = "task") Tasks task, Model model) {
+    public RedirectView editPageSave(@RequestParam("id") Long id, @Valid @ModelAttribute(name = "task") Tasks task, Model model) {
         task.setUsers(usersRepository.findById(id).get());
         task = tasksRepository.saveAndFlush(task);
         model.addAttribute("task", task);
-        return new RedirectView("/{id}/list");
+        return new RedirectView("/list?id="+id);
     }
 
-    @PostMapping("{id}/droptask")
-    public RedirectView deletePageSave(@RequestParam("task_id") Long task_id) {
+    @PostMapping("/droptask")
+    public RedirectView deletePageSave(@RequestParam("id") Long id, @RequestParam("task_id") Long task_id) {
         Tasks task = tasksRepository.findById(task_id).get();
         tasksRepository.delete(task);
-        return new RedirectView("/{id}/list");
+        return new RedirectView("/list?id="+id);
     }
 
 }

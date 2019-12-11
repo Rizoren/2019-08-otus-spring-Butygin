@@ -37,7 +37,7 @@ public class Tasks implements Serializable {
 
     //TODO: I have problem... Recursive getting data
     //When I get Task-list, also get User and get task list in user...
-    @ManyToOne(fetch = FetchType.LAZY, optional=false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private Users users;
 

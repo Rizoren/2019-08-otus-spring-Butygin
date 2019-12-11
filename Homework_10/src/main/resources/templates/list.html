@@ -24,16 +24,12 @@
             <h1 class="padding-el">Your ToDo List</h1>
         </header>
 		<div class="myPanel">
-			<form action="#" th:action="@{newtask}" method="get">
-				<div style="padding: 30px 15px;">
-					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Add task" />
-				</div>
-			</form>
-			<form action="#" th:action="@{droplist}" method="post">
-				<div style="padding: 5px 15px;">
-					<input type="submit" class="submit margin-el" style="width:100% !important; color: salmon;" value="Delete List" />
-				</div>
-			</form>
+			<div style="padding: 30px 15px;">
+				<button id="add" class="submit margin-el" style="width:100% !important;">Add task</button>
+			</div>
+			<div style="padding: 5px 15px;">
+				<button id="del" class="submit margin-el" style="width:100% !important; color: salmon;">Delete List</button>
+			</div>
 			<form action="/" method="get">
 				<div style="padding: 5px 15px;">
 					<input type="submit" class="submit margin-el" style="width:100% !important;" value="Exit" />
@@ -41,29 +37,37 @@
 			</form>
 		</div>
 		<div class="myContent">
-			<ul style="list-style-type:none;">
-				<li th:each="task : ${tasks}">
-					<div class="myTaskEl"><div class="myTaskBody" style="" th:style="${task.getTaskStatus()} == 1 ? 'background: #85C445' : ''">
-						<a th:href="@{edit(task_id=${task.taskId})}" href="edit.html"><span class="padding-el myTaskHeader" name="taskName" th:text="${task.taskName}">Your ToDo Task</span></a>
-						<span class="padding-el" style="display: inline-block" name="taskDescription" th:text="${task.taskDescription}">Description</span>
-				</div></div></li>
-			</ul>
+			<ul style="list-style-type:none;"></ul>
 		</div>
-<!--		<script>
-            $(function () {
-                /*window.location.href*/
-                $.getJSON('/api/tasklist?id=1', function (tasks) {
-                    console.debug(tasks);
-                    tasks.forEach(function (task) {
-                        $('ul').append(`
-						<li><div class="myTaskEl"><div class="myTaskBody" style="" th:style="${task.getTaskStatus()} == 1 ? 'background: #85C445' : ''">
-								<a th:href="@{edit(task_id=${task.taskId})}" href="edit.html"><span class="padding-el myTaskHeader" name="taskName" th:text="${task.taskName}">Your ToDo Task</span></a>
-								<span class="padding-el" style="display: inline-block" name="taskDescription" th:text="${task.taskDescription}">Description</span>
-						</div></div></li>
-						`)
-                    });
+		<script>
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            let userId = getParameterByName('id');
+
+			$.get(`/api/tasklist?id=${userId}`, function (tasks) {
+				for (let task of tasks) {
+					$('ul').append(`
+					<li><div class="myTaskEl"><div class="myTaskBody" style="${task.taskStatus == 1 ? 'background: #85C445' : ''}">
+							<a href="edit?id=${userId}&task_id=${task.taskId}"><span class="padding-el myTaskHeader" name="taskName">${task.taskName}</span></a>
+							<span class="padding-el" style="display: inline-block" name="taskDescription">${task.taskDescription}</span>
+					</div></div></li>
+					`);
+				}
+			});
+
+            $(document).on('click', '#add', function () {
+				window.location.href = `/edit?id=${userId}&task_id=0`;
+            });
+
+			$(document).on('click', '#del', function () {
+                $.post(`/api/droptasklist?id=${userId}`, function (data) {
+					window.location.href = "/";
                 });
             });
-		</script>-->
+		</script>
     </body>
 </html>

@@ -11,4 +11,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface TasksRepository extends JpaRepository<Tasks, Long> {
+    List<Tasks> findAllByUsers_UserId(Long id);
+
+    void deleteAllByUsers_UserId(Long id);
 }

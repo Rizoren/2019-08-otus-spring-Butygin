@@ -44,8 +44,8 @@ public class RepositoryTests {
     public void getUsers () {
         val find = usersRepository.findAll();
         val exp = Arrays.asList(
-                new Users(USER_1, USER_NAME_1, USER_NAME_1, null),
-                new Users(USER_2, USER_NAME_2, USER_NAME_2, null)
+                new Users(USER_1, USER_NAME_1, USER_NAME_1),
+                new Users(USER_2, USER_NAME_2, USER_NAME_2)
         );
         assertThat(find).hasSize(exp.size());
     }
