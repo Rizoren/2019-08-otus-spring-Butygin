@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <title>ToDo List</title>
+        <!-- <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+        <link rel="stylesheet" href="../myCSS.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+
+        <header class="myHeader">
+            <h1 class="padding-el">Your ToDo List</h1>
+        </header>
+		<div id="panel" class="myPanel">
+			<div id="box_save_btn" style="padding: 30px 15px;">
+				<button id="save_btn" class="submit margin-el" style="width:100% !important;">Save</button>
+			</div>
+
+			<div id="box_del_btn" style="padding: 5px 15px;">
+				<button id="del_btn" class="submit margin-el" style="width:100% !important; color: salmon">Delete</button>
+			</div>
+
+			<div id="box_back_btn" style="padding: 5px 15px;">
+				<button id="back_btn" class="submit margin-el" style="width:100% !important;">Back</button>
+			</div>
+		</div>
+		<div class="myContent">
+			<form id="task_data" th:object="${task}" action="#" th:action="@{edit(id=${task.taskId},task_id=${task.taskId})}" method="post">
+				<input type="hidden" name="taskId" th:value="*{taskId}">
+				<span style="display: inline-block;">Task title: </span><input type="text" class="margin-el" style="display: block;" placeholder="title" name="taskName" th:field="*{taskName}">
+				<span style="display: inline-block;">Task description: </span><textarea class="margin-el" style="display: block;" placeholder="description" name="taskDescription" th:field="*{taskDescription}"></textarea>
+				<!--<span style="display: inline-block;">Task date: </span><input type="datetime-local" class="margin-el" style="text-align: center; display: block;" name="taskEnddate" th:field="*{taskEnddate}">-->
+				<span style="display: inline-block;">Task status: </span>
+				<select name="taskStatus" th:field="*{taskStatus}">
+					<option value ="0" th:selected="*{taskStatus==0}">In progress</option>
+					<option value ="1" th:selected="*{taskStatus==1}">Done</option>
+				</select>
+			</form>
+		</div>
+		<script>
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            let task = $('#task_data');
+            let userId = getParameterByName('id');
+            let taskId = getParameterByName('task_id');
+
+            $.get(`/api/task?task_id=${taskId}`, function (data) {
+				task = Object.assign({}, data);
+				if (taskId == 0) {
+				    $('#box_del_btn').hide();
+				}
+            });
+
+            $(document).on('click', '#save_btn', function () {
+                $.post(`/api/savetask?id=${userId}&task_id=${taskId}`, $('#task_data').serialize(), function(data) {
+                    task = Object.assign({}, data);
+                    window.location.href = `/list?id=${userId}`;
+                })
+            });
+
+            $(document).on('click', '#del_btn', function () {
+                $.post(`/api/droptask?task_id=${taskId}`, function(data) {
+                	window.location.href = `/list?id=${userId}`;
+                })
+            });
+
+            $(document).on('click', '#back_btn', function () {
+                window.location.href = `/list?id=${userId}`;
+            });
+		</script>
+    </body>
+</html>
