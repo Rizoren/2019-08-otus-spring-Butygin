@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome Your ToDo List</title>
+    <link rel="stylesheet" href="/css/myCSS.css" th:href="@{/css/myCSS.css}" />
+</head>
+<body>
+<div class="myLoginFrame">
+    <div>
+        <div class="myLogin">
+            <h1 class="margin-el">Service have problem... 500</h1>
+            <div style="padding: 5px 15px;">
+                <button id="prev" class="submit margin-el" style="width:100% !important; color: salmon;">Return to back</button>
+            </div>
+            <p>
+                <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+                <span th:text="${message}">Message</span>
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '#prev', function () {
+        history.back();
+    });
+</script>
+</body>
+</html>

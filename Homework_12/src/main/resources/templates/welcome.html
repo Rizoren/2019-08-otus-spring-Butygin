@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome Your ToDo List</title>
+    <link rel="stylesheet" href="/css/myCSS.css" th:href="@{/css/myCSS.css}" />
+</head>
+<body>
+<div class="myLoginFrame">
+    <div>
+        <div class="myLogin">
+            <form action="#" th:action="@{/login}" method="get">
+                <h1 class="margin-el">Welcome in Your ToDo List</h1>
+                <div>
+                    <input type="submit" class="submit margin-el" value="Get Start !"/>
+                </div>
+                <p>
+                    <!--/*@thymesVar id="usersSize" type="java.lang.String"*/-->
+                    <span th:text="|There are already ${usersSize} of us!|">There are already 0 of us</span>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
